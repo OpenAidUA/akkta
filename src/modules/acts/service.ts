@@ -1,4 +1,4 @@
-import { prisma } from '../../../prisma/prisma-client';
+import { prisma } from '@/lib/db';
 import { calculateTotals } from './helpers';
 import { CreateActRequest } from './domain';
 

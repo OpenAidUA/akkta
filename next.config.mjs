@@ -3,8 +3,19 @@ import withPWAInit from 'next-pwa';
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Если билд всё равно будет ругаться на Turbopack,
-  // добавь флаг --webpack в команду npm run build
+  // Exclude Prisma from client-side bundles (works with both Webpack and Turbopack)
+  serverExternalPackages: ['@prisma/client', 'prisma'],
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Don't bundle Prisma Client on the client side (for webpack builds)
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@prisma/client': false,
+        '@/lib/db': false,
+      };
+    }
+    return config;
+  },
 };
 
 const withPWA = withPWAInit({
