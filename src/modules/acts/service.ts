@@ -48,3 +48,17 @@ export async function createAct(
     return act;
   });
 }
+
+export async function getUserActs(userId: string) {
+  return await prisma.act.findMany({
+    where: {
+      userId,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      client: true,
+    },
+  });
+}
