@@ -1,30 +1,33 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { supabase } from '@/shared/superbase/client';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useActionState, startTransition } from 'react';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { loginAction } from './action';
+import { loginSchema, type LoginSchema } from './schema';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const router = useRouter();
+  const [state, action, isPending] = useActionState(loginAction, null);
 
-  async function submit(e: React.FormEvent) {
-    e.preventDefault();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<LoginSchema>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onTouched',
+  });
 
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
+  const onSubmit = (data: LoginSchema) => {
+    startTransition(() => {
+      const formData = new FormData();
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      action(formData);
     });
-
-    if (error) {
-      setError(error.message);
-    } else {
-      router.push('/');
-    }
-  }
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 font-sans">
@@ -43,38 +46,89 @@ export default function LoginPage() {
           Введіть свої дані, щоб увійти до аккаунту
         </p>
 
-        <form className="space-y-5 mb-4" onSubmit={(e) => e.preventDefault()}>
+        <form className="space-y-5 mb-4" onSubmit={handleSubmit(onSubmit)}>
+          {state?.errors?._form && (
+            <div className="bg-red-50 text-red-500 text-sm p-3 rounded-md">
+              {state.errors._form.join(', ')}
+            </div>
+          )}
+
+          {/* Email Field*/}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-[#1E293B] ml-0.5">
+            <label
+              className="text-sm font-semibold text-[#1E293B] ml-0.5"
+              htmlFor="email"
+            >
               Пошта
             </label>
             <input
+              id="email"
               type="email"
               placeholder="name@company.com"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.email
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('email')}
             />
+            {errors.email && (
+              <p className="text-red-500 text-xs ml-1">
+                {errors.email.message}
+              </p>
+            )}
+            {!errors.email && state?.errors?.email && (
+              <p className="text-red-500 text-xs ml-1">
+                {state.errors.email.join(', ')}
+              </p>
+            )}
           </div>
 
+          {/* Password Field*/}
           <div className="space-y-1.5">
-            <label className="text-sm font-semibold text-[#1E293B] ml-0.5">
+            <label
+              className="text-sm font-semibold text-[#1E293B] ml-0.5"
+              htmlFor="password"
+            >
               Пароль
             </label>
             <input
+              id="password"
               type="password"
-              placeholder="Create a password"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              placeholder="••••••••"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.password
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('password')}
             />
+            {errors.password && (
+              <p className="text-red-500 text-xs ml-1">
+                {errors.password.message}
+              </p>
+            )}
+            {!errors.password && state?.errors?.password && (
+              <p className="text-red-500 text-xs ml-1">
+                {state.errors.password.join(', ')}
+              </p>
+            )}
           </div>
 
           <Button
-            className="bg-linear-to-r w-full mx-auto from-[#4481eb] to-[#2762d9] hover:from-[#3b74e0] hover:to-[#1e53c9] rounded-xl p-4 text-white shadow-md transition-color duration-700 active:scale-95"
+            type="submit"
+            disabled={isPending}
+            className="bg-linear-to-r w-full mx-auto from-[#4481eb] to-[#2762d9] hover:from-[#3b74e0] hover:to-[#1e53c9] rounded-xl p-4 text-white shadow-md transition-color duration-700 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
             aria-label="Submit"
           >
-            Увійти
+            {isPending && (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />
+            )}
+            {isPending ? 'Вхід...' : 'Увійти'}
           </Button>
         </form>
 
-        {/* Разделитель OR */}
+        {/* Separator OR */}
         {/* <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200"></div>
@@ -93,15 +147,15 @@ export default function LoginPage() {
           </span>
         </button> */}
 
-        {/* Футер */}
+        {/* Footer */}
         <p className="text-center text-[15px] text-[#64748B]">
           Ще не спробували?
-          <a
+          <Link
             href="/register"
             className="text-[#3170D4] font-semibold hover:underline ml-2"
           >
             Зареєструватись
-          </a>
+          </Link>
         </p>
       </div>
     </div>

@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().min(2, 'Name must be at least 2 characters'),
+  name: z.string().min(2, "Ім'я повинно бути не менше 2 символів"),
   organizationName: z
     .string()
-    .min(2, 'Organization name must be at least 2 characters'),
-  email: z.string().email('Invalid email address'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+    .min(2, 'Назва організації повинна містити щонайменше 2 символи'),
+  email: z.string().email('Невірна електронна адреса'),
+  password: z.string().min(10, 'Пароль повинен містити щонайменше 10 символів'),
 });
 
 export type RegisterSchema = z.infer<typeof registerSchema>;

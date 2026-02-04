@@ -31,7 +31,7 @@ export async function registerAction(
   if (!validatedFields.success) {
     return {
       errors: validatedFields.error.flatten().fieldErrors,
-      message: 'Invalid fields. Failed to register.',
+      message: 'Невірні поля. Не вдалося зареєструватися.',
     };
   }
 
@@ -78,16 +78,16 @@ export async function registerAction(
       errors: {
         _form: [authError.message],
       },
-      message: 'Failed to create user in Supabase.',
+      message: 'Сталась помилка при створенні користувача.',
     };
   }
 
   if (!authData.user) {
     return {
       errors: {
-        _form: ['Something went wrong. No user returned.'],
+        _form: ['Сталася помилка. Користувача не створено.'],
       },
-      message: 'Registration warning.',
+      message: 'Попередження реєстрації.',
     };
   }
 
@@ -126,9 +126,11 @@ export async function registerAction(
     // In a production app, we might use a cleanup job or call an admin endpoint.
     return {
       errors: {
-        _form: ['Failed to create account data. Please try again.'],
+        _form: [
+          'Не вдалося створити дані облікового запису. Спробуйте ще раз.',
+        ],
       },
-      message: 'Database error.',
+      message: 'Помилка бази даних.',
     };
   }
 

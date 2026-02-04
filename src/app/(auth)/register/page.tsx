@@ -1,12 +1,35 @@
 'use client';
 import Image from 'next/image';
 import { Button } from '@/components/ui/button';
-import { useActionState } from 'react';
+import { useActionState, startTransition } from 'react';
 import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { registerAction } from './action';
+import { registerSchema, type RegisterSchema } from './schema';
 
 export default function SignUpPage() {
   const [state, action, isPending] = useActionState(registerAction, null);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isValid },
+  } = useForm<RegisterSchema>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onTouched',
+  });
+
+  const onSubmit = (data: RegisterSchema) => {
+    startTransition(() => {
+      const formData = new FormData();
+      formData.append('name', data.name);
+      formData.append('organizationName', data.organizationName);
+      formData.append('email', data.email);
+      formData.append('password', data.password);
+      action(formData);
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 font-sans">
@@ -25,7 +48,7 @@ export default function SignUpPage() {
           Почни створювати профессійні акти сьогодні
         </p>
 
-        <form className="space-y-5 mb-4" action={action}>
+        <form className="space-y-5 mb-4" onSubmit={handleSubmit(onSubmit)}>
           {state?.errors?._form && (
             <div className="bg-red-50 text-red-500 text-sm p-3 rounded-md">
               {state.errors._form.join(', ')}
@@ -42,12 +65,19 @@ export default function SignUpPage() {
             </label>
             <input
               id="name"
-              name="name"
               type="text"
               placeholder="John Doe"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.name
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('name')}
             />
-            {state?.errors?.name && (
+            {errors.name && (
+              <p className="text-red-500 text-xs ml-1">{errors.name.message}</p>
+            )}
+            {!errors.name && state?.errors?.name && (
               <p className="text-red-500 text-xs ml-1">
                 {state.errors.name.join(', ')}
               </p>
@@ -64,12 +94,21 @@ export default function SignUpPage() {
             </label>
             <input
               id="organizationName"
-              name="organizationName"
               type="text"
               placeholder="My Company LLC"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.organizationName
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('organizationName')}
             />
-            {state?.errors?.organizationName && (
+            {errors.organizationName && (
+              <p className="text-red-500 text-xs ml-1">
+                {errors.organizationName.message}
+              </p>
+            )}
+            {!errors.organizationName && state?.errors?.organizationName && (
               <p className="text-red-500 text-xs ml-1">
                 {state.errors.organizationName.join(', ')}
               </p>
@@ -86,12 +125,21 @@ export default function SignUpPage() {
             </label>
             <input
               id="email"
-              name="email"
               type="email"
               placeholder="name@company.com"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.email
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('email')}
             />
-            {state?.errors?.email && (
+            {errors.email && (
+              <p className="text-red-500 text-xs ml-1">
+                {errors.email.message}
+              </p>
+            )}
+            {!errors.email && state?.errors?.email && (
               <p className="text-red-500 text-xs ml-1">
                 {state.errors.email.join(', ')}
               </p>
@@ -108,12 +156,21 @@ export default function SignUpPage() {
             </label>
             <input
               id="password"
-              name="password"
               type="password"
               placeholder="Create a password"
-              className="w-full px-4 py-2.5 rounded-lg border border-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder:text-gray-400"
+              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
+                errors.password
+                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
+                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
+              }`}
+              {...register('password')}
             />
-            {state?.errors?.password && (
+            {errors.password && (
+              <p className="text-red-500 text-xs ml-1">
+                {errors.password.message}
+              </p>
+            )}
+            {!errors.password && state?.errors?.password && (
               <p className="text-red-500 text-xs ml-1">
                 {state.errors.password.join(', ')}
               </p>
@@ -126,44 +183,22 @@ export default function SignUpPage() {
             className="bg-linear-to-r w-full mx-auto from-[#4481eb] to-[#2762d9] hover:from-[#3b74e0] hover:to-[#1e53c9] rounded-xl p-4 text-white shadow-md transition-color duration-700 active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed"
             aria-label="Submit"
           >
+            {isPending && (
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />
+            )}
             {isPending ? 'Реєстрація...' : 'Зареєструватись'}
           </Button>
         </form>
 
-        <div className="text-center mt-4">
-          <Link href="/login" className="text-sm text-blue-600 hover:underline">
-            Вже є аккаунт? Увійти
-          </Link>
-        </div>
-
-        {/* Separator OR */}
-        {/* <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-3 text-[#94A3B8] font-medium tracking-wider">
-              OR
-            </span>
-          </div>
-        </div> */}
-
-        {/* Google Sign Up */}
-        {/* <button className="w-full flex items-center justify-center gap-3 border border-gray-200 py-2.5 rounded-lg hover:bg-gray-50 transition-colors mb-8">
-          <span className="text-[#1E293B] font-medium">
-            Sign up with Google
-          </span>
-        </button> */}
-
         {/* Footer */}
         <p className="text-center text-[15px] text-[#64748B]">
           Вже маєте аккаунт?
-          <a
+          <Link
             href="/login"
             className="text-[#3170D4] font-semibold hover:underline ml-2"
           >
             Увійти
-          </a>
+          </Link>
         </p>
       </div>
     </div>
