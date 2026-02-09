@@ -6,6 +6,7 @@ import { createSupabaseServerClient } from '@/shared/superbase/server';
 import { getUserActs } from '@/modules/acts/service';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
+import OfflineSyncBanner from './OfflineSyncBanner';
 
 export const dynamic = 'force-dynamic';
 
@@ -21,6 +22,7 @@ export default async function Acts() {
 
   return (
     <>
+      <OfflineSyncBanner />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-slate-900">Мої Акти</h1>
         {acts.length > 0 && (

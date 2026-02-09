@@ -16,6 +16,15 @@ export const metadata: Metadata = {
   title: 'Clarus Acts',
   description:
     'Clarus Acts — сервіс для створення актів виконаних робіт у PDF. Просто, швидко, професійно.',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Clarus Acts',
+  },
+  formatDetection: {
+    telephone: false,
+  },
 };
 
 export default function RootLayout({
