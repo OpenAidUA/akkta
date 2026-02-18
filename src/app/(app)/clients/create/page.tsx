@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'react-feather';
 import Link from 'next/link';
-import CreateClientForm from '@/components/forms/createClient/CreateClientForm';
+import ClientForm from '@/components/forms/createClient/CreateClientForm';
 
 export default function CreateClientPage() {
   return (
@@ -16,7 +16,7 @@ export default function CreateClientPage() {
         <h1 className="text-2xl font-bold text-slate-900">Новий клієнт</h1>
       </div>
 
-      <CreateClientForm />
+      <ClientForm />
     </div>
   );
 }

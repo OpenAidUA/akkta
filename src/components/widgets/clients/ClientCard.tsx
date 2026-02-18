@@ -1,6 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 import { Client } from '@prisma/client';
-import { Users, Phone, Mail, FileText } from 'react-feather';
+import { Users, Phone, Mail, FileText, Edit2 } from 'react-feather';
 import { Button } from '@/components/ui/button';
 
 interface ClientCardProps {
@@ -10,6 +11,19 @@ interface ClientCardProps {
 export const ClientCard: React.FC<ClientCardProps> = ({ client }) => {
   return (
     <div className="bg-white p-5 rounded-xl border border-slate-200 hover:shadow-md transition-shadow group relative">
+      <Link
+        href={`/clients/${client.id}/edit`}
+        className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity"
+      >
+        <Button
+          variant="ghost"
+          size="sm"
+          className="h-8 w-8 p-0 rounded-full hover:bg-slate-100"
+        >
+          <Edit2 size={14} className="text-slate-500" />
+        </Button>
+      </Link>
+
       <div className="mb-4">
         <h3 className="font-semibold text-lg text-slate-900 line-clamp-1">
           {client.name}

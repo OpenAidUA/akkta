@@ -2,12 +2,13 @@
 
 import { useActionState, startTransition } from 'react';
 import { createClientAction } from '@/app/(app)/clients/create/action';
+import { updateClientAction } from '@/app/(app)/clients/[id]/edit/action';
 import { Button, Input, Label } from '@/components/ui';
 import { Save, User, FileText, Phone, Mail } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  CreateClientSchema,
+  ClientSchema,
   type CreateClientRequest,
 } from '@/modules/clients/domain';
 
@@ -16,19 +17,34 @@ const initialState = {
   errors: {},
 };
 
-const CreateClientForm = () => {
-  const [state, action, isPending] = useActionState(
-    createClientAction,
+export interface ClientFormProps {
+  mode?: 'create' | 'edit';
+  clientId?: string;
+  defaultValues?: Partial<CreateClientRequest>;
+}
+
+const ClientForm = ({
+  mode = 'create',
+  clientId,
+  defaultValues,
+}: ClientFormProps) => {
+  const createAction = useActionState(createClientAction, initialState);
+  const updateAction = useActionState(
+    clientId ? updateClientAction.bind(null, clientId) : createClientAction,
     initialState,
   );
+
+  const [state, action, isPending] =
+    mode === 'edit' ? updateAction : createAction;
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<CreateClientRequest>({
-    resolver: zodResolver(CreateClientSchema),
+    resolver: zodResolver(ClientSchema),
     mode: 'onTouched',
+    defaultValues,
   });
 
   const onSubmit = (data: CreateClientRequest) => {
@@ -179,7 +195,8 @@ const CreateClientForm = () => {
             'Збереження...'
           ) : (
             <>
-              <Save size={18} /> Зберегти клієнта
+              <Save size={18} />{' '}
+              {mode === 'edit' ? 'Оновити клієнта' : 'Зберегти клієнта'}
             </>
           )}
         </Button>
@@ -188,4 +205,4 @@ const CreateClientForm = () => {
   );
 };
 
-export default CreateClientForm;
+export default ClientForm;
