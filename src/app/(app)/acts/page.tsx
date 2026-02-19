@@ -65,13 +65,7 @@ export default async function Acts() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {acts.map((act) => {
-                // Cast to any to access json fields safely for now or assume structure from helper
                 const actData = act.data;
-                const total =
-                  actData?.totals?.totalText ||
-                  (actData?.items?.[0]?.total
-                    ? `${actData.items[0].total} грн`
-                    : '—');
                 const actNumber = actData?.meta?.number || '—';
                 const dateStr = actData?.meta?.date
                   ? format(new Date(actData.meta.date), 'd MMM yyyy', {
@@ -110,10 +104,16 @@ export default async function Acts() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize
-                          ${act.status === 'ready' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}`}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                          ${act.status === 'ready' ? 'bg-green-100 text-green-800' : ''}
+                          ${act.status === 'draft' ? 'bg-gray-100 text-gray-800' : ''}
+                          ${act.status === 'generating' ? 'bg-yellow-100 text-yellow-800' : ''}
+                          ${act.status === 'failed' ? 'bg-red-100 text-red-800' : ''}`}
                       >
-                        {act.status === 'draft' ? 'Чернетка' : act.status}
+                        {act.status === 'draft' && 'Чернетка'}
+                        {act.status === 'generating' && 'Генерація...'}
+                        {act.status === 'ready' && 'Готовий'}
+                        {act.status === 'failed' && 'Помилка'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -128,13 +128,15 @@ export default async function Acts() {
                           </Button>
                         </Link>
                         {act.status === 'ready' && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600"
-                          >
-                            <Download size={16} />
-                          </Button>
+                          <a href={`/api/acts/${act.id}/pdf`} download>
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600"
+                            >
+                              <Download size={16} />
+                            </Button>
+                          </a>
                         )}
                       </div>
                     </td>

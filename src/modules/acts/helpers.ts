@@ -1,4 +1,5 @@
 import { ActDocument, ActDocumentSchema } from './domain';
+import { amountToWordsUAH } from './amount-to-words';
 
 // Bankers rounding (round half to even)
 function roundBankers(value: number, decimals = 2) {
@@ -14,11 +15,6 @@ function roundBankers(value: number, decimals = 2) {
   return Math.round(n) / factor;
 }
 
-function amountToWords(n: number) {
-  // Minimal placeholder: localized textual representation can be replaced with a proper lib
-  return `${n.toFixed(2)} грн`;
-}
-
 // Calculate derived totals server-side and validate
 export function calculateTotals(raw: ActDocument): ActDocument {
   const items = raw.items.map((it) => {
@@ -31,7 +27,7 @@ export function calculateTotals(raw: ActDocument): ActDocument {
     2,
   );
   const total = subtotal;
-  const totals = { subtotal, total, totalText: amountToWords(total) };
+  const totals = { subtotal, total, totalText: amountToWordsUAH(total) };
 
   const out = { ...raw, items, totals };
 
