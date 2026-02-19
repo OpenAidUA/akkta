@@ -237,8 +237,7 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
             </thead>
             <tbody>
               {items.map((item, i) => {
-                const itemTotal =
-                  item.total ?? item.quantity * item.unitPrice;
+                const itemTotal = item.total ?? item.quantity * item.unitPrice;
                 return (
                   <tr
                     key={i}

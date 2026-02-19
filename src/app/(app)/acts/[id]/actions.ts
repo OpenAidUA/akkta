@@ -30,9 +30,7 @@ export async function generatePdfAction(
     console.error('PDF generation failed:', error);
     return {
       message:
-        error instanceof Error
-          ? error.message
-          : 'Не вдалося згенерувати PDF',
+        error instanceof Error ? error.message : 'Не вдалося згенерувати PDF',
       error: true,
     };
   }

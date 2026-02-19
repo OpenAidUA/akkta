@@ -20,9 +20,7 @@ async function getBrowser(): Promise<Browser> {
 /**
  * Generates a PDF buffer from act data using Playwright (headless Chromium).
  */
-export async function generateActPdf(
-  data: ActTemplateData,
-): Promise<Buffer> {
+export async function generateActPdf(data: ActTemplateData): Promise<Buffer> {
   const html = renderActHtml(data);
   const browser = await getBrowser();
   const page = await browser.newPage();

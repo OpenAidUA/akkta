@@ -44,16 +44,12 @@ export function renderActHtml(data: ActTemplateData): string {
     data.contractorName || parties.contractor.name,
   );
   const contractorRep = escapeHtml(parties.contractor.representative);
-  const clientName = escapeHtml(
-    clientSnapshot.name || parties.client.name,
-  );
+  const clientName = escapeHtml(clientSnapshot.name || parties.client.name);
   const clientRep = escapeHtml(parties.client.representative || '');
   const clientEdrpou = clientSnapshot.edrpou
     ? escapeHtml(clientSnapshot.edrpou)
     : '';
-  const contractRef = act.contractRef
-    ? escapeHtml(act.contractRef)
-    : '';
+  const contractRef = act.contractRef ? escapeHtml(act.contractRef) : '';
   const city = meta.city ? escapeHtml(meta.city) : '';
   const dateFormatted = formatDate(meta.date);
 
