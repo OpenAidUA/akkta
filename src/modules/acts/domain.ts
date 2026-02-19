@@ -8,6 +8,12 @@ export const ActItemSchema = z.object({
   total: z.number().optional(),
 });
 
+export const ActTotalsSchema = z.object({
+  subtotal: z.number(),
+  total: z.number(),
+  totalText: z.string(),
+});
+
 export const ActDocumentSchema = z.object({
   meta: z.object({
     number: z.string(),
@@ -26,20 +32,25 @@ export const ActDocumentSchema = z.object({
   }),
   items: z.array(ActItemSchema).min(1),
   contractRef: z.string().optional(),
+  totals: ActTotalsSchema.optional(),
 });
 
 export type ActDocument = z.infer<typeof ActDocumentSchema>;
+
+export const ClientSnapshotSchema = z.object({
+  name: z.string(),
+  edrpou: z.string().optional(),
+  phone: z.string().optional(),
+  email: z.string().optional(),
+});
+
+export type ClientSnapshot = z.infer<typeof ClientSnapshotSchema>;
 
 export const CreateActRequestSchema = z.object({
   act: ActDocumentSchema,
   client: z.object({
     id: z.string().uuid().nullable(),
-    snapshot: z.object({
-      name: z.string(),
-      edrpou: z.string().optional(),
-      phone: z.string().optional(),
-      email: z.string().optional(),
-    }),
+    snapshot: ClientSnapshotSchema,
     save: z.boolean(),
   }),
 });

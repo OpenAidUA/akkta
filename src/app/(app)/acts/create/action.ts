@@ -2,18 +2,21 @@
 
 import { createSupabaseServerClient } from '@/shared/superbase/server';
 import { createAct } from '@/modules/acts/service';
-import { CreateActRequestSchema } from '@/modules/acts/domain';
+import {
+  CreateActRequestSchema,
+  type CreateActRequest,
+} from '@/modules/acts/domain';
 import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
 
 export type CreateActState = {
-  errors?: any;
+  errors?: { [K in keyof CreateActRequest]?: string[] };
   message?: string;
 } | null;
 
 export async function createActAction(
   prevState: CreateActState,
-  data: any, // We will receive JSON object here, not FormData, for simplicity with nested arrays
+  data: CreateActRequest,
 ): Promise<CreateActState> {
   const supabase = await createSupabaseServerClient();
   const {
@@ -49,12 +52,11 @@ export async function createActAction(
   }
 
   try {
-    const act = await createAct(organizationId, user.id, validation.data);
-    // Success
-  } catch (error: any) {
+    await createAct(organizationId, user.id, validation.data);
+  } catch (error: unknown) {
     console.error(error);
     return {
-      message: error.message || 'Failed to create act',
+      message: error instanceof Error ? error.message : 'Failed to create act',
     };
   }
 

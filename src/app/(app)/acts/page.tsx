@@ -66,7 +66,7 @@ export default async function Acts() {
             <tbody className="divide-y divide-slate-100">
               {acts.map((act) => {
                 // Cast to any to access json fields safely for now or assume structure from helper
-                const actData = act.data as any;
+                const actData = act.data;
                 const total =
                   actData?.totals?.totalText ||
                   (actData?.items?.[0]?.total
@@ -79,9 +79,7 @@ export default async function Acts() {
                     })
                   : '—';
                 const clientName =
-                  (act.clientSnapshot as any)?.name ||
-                  act.client?.name ||
-                  'Без назви';
+                  act.clientSnapshot?.name || act.client?.name || 'Без назви';
 
                 return (
                   <tr

@@ -11,16 +11,20 @@ export async function POST(req: Request) {
     //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     // }
 
+    // TODO: replace hardcoded IDs with real auth context
+    const organizationId = '122';
+    const userId = '122';
+
     const body = await req.json();
     const parsed = CreateActRequestSchema.parse(body);
 
-    const act = await createAct('122', parsed);
+    const act = await createAct(organizationId, userId, parsed);
 
     return NextResponse.json({
       id: act.id,
       status: act.status,
     });
-  } catch (err: any) {
+  } catch (err: unknown) {
     if (err instanceof ZodError) {
       return NextResponse.json(
         { error: 'Validation error', details: err.message },

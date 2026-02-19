@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/db';
 import { calculateTotals } from './helpers';
 import { CreateActRequest } from './domain';
+import type { ActWithClient } from './types';
 
 export async function createAct(
   organizationId: string,
@@ -49,8 +50,8 @@ export async function createAct(
   });
 }
 
-export async function getUserActs(userId: string) {
-  return await prisma.act.findMany({
+export async function getUserActs(userId: string): Promise<ActWithClient[]> {
+  const acts = await prisma.act.findMany({
     where: {
       userId,
     },
@@ -61,4 +62,6 @@ export async function getUserActs(userId: string) {
       client: true,
     },
   });
+
+  return acts as unknown as ActWithClient[];
 }

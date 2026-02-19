@@ -1,6 +1,11 @@
 'use client';
 
-import { useFieldArray, useForm } from 'react-hook-form';
+import {
+  useFieldArray,
+  useForm,
+  type FieldErrors,
+  type FieldPath,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import {
@@ -91,7 +96,7 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
     formState: { errors },
   } = useForm<ActFormValues>({
     resolver: zodResolver(CreateActRequestSchema),
-    defaultValues: defaultValues as any,
+    defaultValues,
     mode: 'onBlur',
   });
 
@@ -105,11 +110,12 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
     control,
     name: 'act.items',
   });
-  
+
   const isOnline = useNetworkStatus();
 
   const nextStep = async () => {
-    const fieldsToValidate = STEPS[currentStep].fields as any;
+    const fieldsToValidate = STEPS[currentStep]
+      .fields as FieldPath<ActFormValues>[];
     const isValid = await trigger(fieldsToValidate);
 
     if (isValid) {
@@ -124,14 +130,16 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
   const onSubmit = (data: ActFormValues) => {
     // If Offline - save to local storage
     if (!isOnline) {
-       try {
-          ActStorage.save(data as any);
-          alert('Інтернет відсутній. Акт збережено як локальну чернетку. Ви зможете синхронізувати його пізніше на головній сторінці.');
-          router.push('/acts');
-       } catch (e: any) {
-          alert(e.message);
-       }
-       return;
+      try {
+        ActStorage.save(data);
+        alert(
+          'Інтернет відсутній. Акт збережено як локальну чернетку. Ви зможете синхронізувати його пізніше на головній сторінці.',
+        );
+        router.push('/acts');
+      } catch (e: unknown) {
+        alert(e instanceof Error ? e.message : 'Невідома помилка');
+      }
+      return;
     }
 
     startTransition(async () => {
@@ -147,7 +155,7 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
     });
   };
 
-  const onError = (errors: any) => {
+  const onError = (errors: FieldErrors<ActFormValues>) => {
     console.error('Form errors:', errors);
     alert('Будь ласка, перевірте правильність заповнення всіх полів.');
   };
@@ -457,17 +465,17 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
                 type="submit"
                 disabled={isPending}
                 className={twMerge(
-                  "text-white gap-2 ml-auto px-8 shadow-lg transition-all",
-                  isOnline 
-                    ? "bg-green-600 hover:bg-green-700 shadow-green-600/20" 
-                    : "bg-amber-500 hover:bg-amber-600 shadow-amber-500/20"
+                  'text-white gap-2 ml-auto px-8 shadow-lg transition-all',
+                  isOnline
+                    ? 'bg-green-600 hover:bg-green-700 shadow-green-600/20'
+                    : 'bg-amber-500 hover:bg-amber-600 shadow-amber-500/20',
                 )}
               >
                 {isPending ? (
                   'Збереження...'
                 ) : (
                   <>
-                    {isOnline ? <Save size={16} /> : <WifiOff size={16} />} 
+                    {isOnline ? <Save size={16} /> : <WifiOff size={16} />}
                     {isOnline ? 'Зберегти акт' : 'Зберегти офлайн'}
                   </>
                 )}
