@@ -6,18 +6,21 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Save, WifiOff } from 'react-feather';
 import Link from 'next/link';
 import { useTransition, useState, useEffect } from 'react';
-import { createActAction } from './action';
+import { createActAction } from '../../../app/(app)/acts/create/action';
 import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
 import { ActStorage } from '@/modules/acts/storage';
 
-import { type ActFormValues, STEPS } from './types';
-import FormStepper from '../../../../components/widgets/acts/FormStepper';
-import StepMeta from '../../../../components/widgets/acts/StepMeta';
-import StepClient from '../../../../components/widgets/acts/StepClient';
-import StepItems from '../../../../components/widgets/acts/StepItems';
+import {
+  type ActFormValues,
+  STEPS,
+} from '../../../app/(app)/acts/create/types';
+import FormStepper from '../../widgets/acts/FormStepper';
+import StepMeta from '../../widgets/acts/StepMeta';
+import StepClient from '../../widgets/acts/StepClient';
+import StepItems from '../../widgets/acts/StepItems';
 
 const defaultValues: Partial<ActFormValues> = {
   act: {
@@ -75,7 +78,7 @@ export default function CreateActForm({ clients }: CreateActFormProps) {
   } = useForm<ActFormValues>({
     resolver: zodResolver(CreateActRequestSchema),
     defaultValues,
-    mode: 'onTouched',
+    mode: 'onBlur',
   });
 
   const clientName = watch('client.snapshot.name');

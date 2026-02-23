@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
+import { Client } from '@prisma/client';
 import { Edit2 } from 'react-feather';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
@@ -7,18 +8,7 @@ import { uk } from 'date-fns/locale';
 import { DeleteClientButton } from '@/components/widgets/clients/DeleteClientButton';
 
 interface ClientsListProps {
-  clients: Array<{
-    id: string;
-    name: string;
-    edrpou: string | null;
-    contactName: string | null;
-    email: string | null;
-    phone: string | null;
-    createdAt: Date | string;
-    _count: {
-      acts: number;
-    };
-  }>;
+  clients: Array<Client & { _count: { acts: number } }>;
   searchQuery: string;
 }
 

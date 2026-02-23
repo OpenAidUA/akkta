@@ -47,7 +47,7 @@ function SidebarContent() {
               href={item.href}
               onClick={close}
               className={twMerge(
-                'flex items-center gap-2 rounded-2xl px-3 py-2 text-md font-medium transition-colors',
+                'flex items-center gap-2 rounded-2xl px-3 py-2 text-lg font-medium transition-colors',
                 'text-gray-400 hover:bg-slate-800 hover:text-white',
                 isActive && 'bg-sidebar-accent text-white shadow-sm',
               )}

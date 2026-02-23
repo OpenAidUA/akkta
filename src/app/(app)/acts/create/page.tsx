@@ -1,7 +1,7 @@
 import { createSupabaseServerClient } from '@/shared/superbase/server';
 import { prisma } from '@/lib/db';
 import { getOrganizationClients } from '@/modules/clients/service';
-import CreateActForm from './CreateActForm';
+import CreateActForm from '../../../../components/forms/createAct/CreateActForm';
 
 export default async function CreateActPage() {
   const supabase = await createSupabaseServerClient();

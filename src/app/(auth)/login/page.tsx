@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { Button } from '@/components/ui/button';
+import { Button, Input, Label } from '@/components/ui';
 import { useActionState, startTransition } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
@@ -55,21 +55,17 @@ export default function LoginPage() {
 
           {/* Email Field*/}
           <div className="space-y-1.5">
-            <label
+            <Label
               className="text-sm font-semibold text-[#1E293B] ml-0.5"
               htmlFor="email"
             >
               Пошта
-            </label>
-            <input
+            </Label>
+            <Input
               id="email"
               type="email"
               placeholder="name@company.com"
-              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
-                errors.email
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
-                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
-              }`}
+              className={errors.email ? 'border-red-400 focus-visible:ring-red-400/40' : ''}
               {...register('email')}
             />
             {errors.email && (
@@ -86,21 +82,17 @@ export default function LoginPage() {
 
           {/* Password Field*/}
           <div className="space-y-1.5">
-            <label
+            <Label
               className="text-sm font-semibold text-[#1E293B] ml-0.5"
               htmlFor="password"
             >
               Пароль
-            </label>
-            <input
+            </Label>
+            <Input
               id="password"
               type="password"
               placeholder="••••••••"
-              className={`w-full px-4 py-2.5 rounded-lg border focus:outline-none focus:ring-2 transition-all placeholder:text-gray-400 ${
-                errors.password
-                  ? 'border-red-300 focus:border-red-500 focus:ring-red-500/20'
-                  : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500/20'
-              }`}
+              className={errors.password ? 'border-red-400 focus-visible:ring-red-400/40' : ''}
               {...register('password')}
             />
             {errors.password && (

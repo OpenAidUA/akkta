@@ -1,10 +1,14 @@
 import { z } from 'zod';
 
 export const ActItemSchema = z.object({
-  title: z.string().min(1),
+  title: z.string().min(1, 'Вкажіть назву послуги'),
   description: z.string().optional(),
-  quantity: z.number().positive(),
-  unitPrice: z.number().nonnegative(),
+  quantity: z
+    .number({ error: 'Вкажіть кількість' })
+    .positive('Кількість має бути більше 0'),
+  unitPrice: z
+    .number({ error: 'Вкажіть ціну' })
+    .nonnegative('Ціна не може бути від\'ємною'),
   total: z.number().optional(),
 });
 
@@ -16,9 +20,9 @@ export const ActTotalsSchema = z.object({
 
 export const ActDocumentSchema = z.object({
   meta: z.object({
-    number: z.string(),
-    city: z.string().optional(),
-    date: z.string(), // ISO
+    number: z.string().min(1, 'Вкажіть номер акту'),
+    city: z.string().min(1, 'Вкажіть місто'),
+    date: z.string().min(1, 'Вкажіть дату'),
   }),
   parties: z.object({
     client: z.object({
@@ -30,7 +34,7 @@ export const ActDocumentSchema = z.object({
       representative: z.string(),
     }),
   }),
-  items: z.array(ActItemSchema).min(1),
+  items: z.array(ActItemSchema).min(1, 'Додайте хоча б одну послугу'),
   contractRef: z.string().optional(),
   totals: ActTotalsSchema.optional(),
 });
@@ -38,7 +42,7 @@ export const ActDocumentSchema = z.object({
 export type ActDocument = z.infer<typeof ActDocumentSchema>;
 
 export const ClientSnapshotSchema = z.object({
-  name: z.string(),
+  name: z.string().min(1, 'Вкажіть назву клієнта'),
   edrpou: z.string().optional(),
   phone: z.string().optional(),
   email: z.string().optional(),

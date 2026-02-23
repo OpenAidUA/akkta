@@ -86,7 +86,11 @@ const ClientForm = ({
         <Input
           id="name"
           placeholder="ТОВ Успіх"
-          className={errors.name || state?.errors?.name ? 'border-red-500' : ''}
+          className={
+            errors.name || state?.errors?.name
+              ? 'border-red-400 focus-visible:ring-red-400/40'
+              : ''
+          }
           {...register('name')}
         />
         {errors.name && (
@@ -108,7 +112,9 @@ const ClientForm = ({
           id="edrpou"
           placeholder="12345678"
           className={
-            errors.edrpou || state?.errors?.edrpou ? 'border-red-500' : ''
+            errors.edrpou || state?.errors?.edrpou
+              ? 'border-red-400 focus-visible:ring-red-400/40'
+              : ''
           }
           {...register('edrpou')}
         />
@@ -133,7 +139,7 @@ const ClientForm = ({
             placeholder="Іван Іванов"
             className={
               errors.contactName || state?.errors?.contactName
-                ? 'border-red-500'
+                ? 'border-red-400 focus-visible:ring-red-400/40'
                 : ''
             }
             {...register('contactName')}
@@ -155,7 +161,9 @@ const ClientForm = ({
             type="tel"
             placeholder="+380 50 000 00 00"
             className={
-              errors.phone || state?.errors?.phone ? 'border-red-500' : ''
+              errors.phone || state?.errors?.phone
+                ? 'border-red-400 focus-visible:ring-red-400/40'
+                : ''
             }
             {...register('phone')}
           />
@@ -177,7 +185,9 @@ const ClientForm = ({
           type="email"
           placeholder="client@mail.com"
           className={
-            errors.email || state?.errors?.email ? 'border-red-500' : ''
+            errors.email || state?.errors?.email
+              ? 'border-red-400 focus-visible:ring-red-400/40'
+              : ''
           }
           {...register('email')}
         />
