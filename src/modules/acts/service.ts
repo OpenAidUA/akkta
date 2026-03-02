@@ -92,6 +92,47 @@ export async function getActPdf(actId: string) {
  * and transitions the act status to 'ready'.
  * For production, replace fileUrl with Supabase Storage upload.
  */
+export async function updateAct(
+  actId: string,
+  userId: string,
+  payload: CreateActRequest,
+): Promise<void> {
+  const act = await prisma.act.findFirst({ where: { id: actId, userId } });
+  if (!act) throw new Error('Act not found');
+
+  await prisma.$transaction(async (tx) => {
+    const validatedAct = calculateTotals(payload.act);
+
+    let clientId: string | null = payload.client.id ?? null;
+    const clientSnapshot = payload.client.snapshot;
+
+    if (clientId) {
+      const exists = await tx.client.findFirst({
+        where: { id: clientId, organizationId: act.organizationId },
+      });
+      if (!exists) throw new Error('Client not found');
+    }
+
+    if (payload.client.save === true && !clientId) {
+      const client = await tx.client.create({
+        data: { ...clientSnapshot, organizationId: act.organizationId },
+      });
+      clientId = client.id;
+    }
+
+    await tx.act.update({
+      where: { id: actId },
+      data: {
+        clientId,
+        clientSnapshot,
+        data: validatedAct,
+        // Після редагування PDF більше не актуальний — скидаємо до draft
+        status: 'draft',
+      },
+    });
+  });
+}
+
 export async function generateAndSaveActPdf(
   actId: string,
   userId: string,

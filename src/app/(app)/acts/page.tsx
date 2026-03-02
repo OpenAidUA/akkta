@@ -52,15 +52,15 @@ export default async function Acts() {
           </Link>
         </EmptyPagePlaceholder>
       ) : (
-        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-600">
             <thead className="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
               <tr>
-                <th className="px-6 py-4">Номер / Дата</th>
-                <th className="px-6 py-4">Клієнт</th>
-                <th className="px-6 py-4">Сума</th>
-                <th className="px-6 py-4">Статус</th>
-                <th className="px-6 py-4 text-right">Дії</th>
+                <th className="px-6 py-4 whitespace-nowrap">Номер / Дата</th>
+                <th className="px-6 py-4 whitespace-nowrap">Клієнт</th>
+                <th className="px-6 py-4 whitespace-nowrap">Сума</th>
+                <th className="px-6 py-4 whitespace-nowrap">Статус</th>
+                <th className="px-6 py-4 text-right whitespace-nowrap">Дії</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100">
@@ -82,19 +82,18 @@ export default async function Acts() {
                   >
                     <td className="px-6 py-4">
                       <div className="flex flex-col">
-                        <span className="font-medium text-slate-900">
+                        <span className="font-medium text-slate-900 whitespace-nowrap">
                           № {actNumber}
                         </span>
-                        <span className="text-xs text-slate-400">
+                        <span className="text-xs text-slate-400 whitespace-nowrap">
                           {dateStr}
                         </span>
                       </div>
                     </td>
-                    <td className="px-6 py-4 font-medium text-slate-700">
+                    <td className="px-6 py-4 font-medium text-slate-700 whitespace-nowrap">
                       {clientName}
                     </td>
-                    <td className="px-6 py-4 font-medium text-slate-900">
-                      {/* Better formatting could go here */}
+                    <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">
                       {typeof actData?.totals?.total === 'number'
                         ? new Intl.NumberFormat('uk-UA', {
                             style: 'currency',
@@ -104,7 +103,7 @@ export default async function Acts() {
                     </td>
                     <td className="px-6 py-4">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
                           ${act.status === 'ready' ? 'bg-green-100 text-green-800' : ''}
                           ${act.status === 'draft' ? 'bg-gray-100 text-gray-800' : ''}
                           ${act.status === 'generating' ? 'bg-yellow-100 text-yellow-800' : ''}

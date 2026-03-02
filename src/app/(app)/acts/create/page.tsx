@@ -1,6 +1,7 @@
 import { createSupabaseServerClient } from '@/shared/superbase/server';
 import { prisma } from '@/lib/db';
 import { getOrganizationClients } from '@/modules/clients/service';
+import { getOrganizationByUserId } from '@/modules/organizations/service';
 import CreateActForm from '../../../../components/forms/createAct/CreateActForm';
 
 export default async function CreateActPage() {
@@ -17,9 +18,17 @@ export default async function CreateActPage() {
     where: { userId: user.id },
   });
 
-  const clients = membership
-    ? await getOrganizationClients(membership.organizationId)
-    : [];
+  const [clients, org] = await Promise.all([
+    membership
+      ? getOrganizationClients(membership.organizationId)
+      : Promise.resolve([]),
+    getOrganizationByUserId(user.id),
+  ]);
 
-  return <CreateActForm clients={clients} />;
+  const contractor = {
+    name: org?.name ?? '',
+    representative: org?.representative ?? '',
+  };
+
+  return <CreateActForm clients={clients} contractor={contractor} />;
 }

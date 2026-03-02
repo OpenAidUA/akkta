@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Menu } from 'react-feather';
 import { useSidebar } from '@/shared/providers/SidebarProvider';
 import { useAuth } from '@/shared/providers/AuthProvider';
@@ -51,12 +52,13 @@ export default function Header() {
             <p className="text-xs text-slate-400 leading-tight">{orgName}</p>
           )}
         </div>
-        <button
+        <Link
+          href="/settings"
           className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
-          title={userName || 'User'}
+          title="Налаштування"
         >
           {initials}
-        </button>
+        </Link>
       </div>
     </header>
   );

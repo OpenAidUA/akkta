@@ -32,11 +32,12 @@ export async function GET(req: Request, context: RouteContext) {
     });
 
     const filename = `act-${act.data.meta.number || act.id}.pdf`;
+    const encodedFilename = encodeURIComponent(filename);
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {
         'Content-Type': 'application/pdf',
-        'Content-Disposition': `attachment; filename="${filename}"`,
+        'Content-Disposition': `attachment; filename="act.pdf"; filename*=UTF-8''${encodedFilename}`,
         'Content-Length': String(pdfBuffer.length),
       },
     });

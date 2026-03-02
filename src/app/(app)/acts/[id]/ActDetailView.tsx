@@ -1,16 +1,17 @@
 'use client';
 
 import { useTransition, useState } from 'react';
-import Link from 'next/link';
+
 import {
-  ArrowLeft,
   Download,
+  Edit2,
   FileText,
   Loader,
   CheckCircle,
   AlertCircle,
 } from 'react-feather';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import type { ActWithClient } from '@/modules/acts/types';
@@ -81,16 +82,10 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto">
+    <div className="">
       {/* Header */}
-      <div className="flex items-center justify-between mb-6">
+      <div className="md:flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <Link href="/acts">
-            <Button variant="ghost" size="sm" className="gap-2 text-slate-500">
-              <ArrowLeft size={16} />
-              Назад
-            </Button>
-          </Link>
           <div>
             <h1 className="text-2xl font-bold text-slate-900">
               Акт № {meta.number || '—'}
@@ -99,18 +94,30 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-col md:flex-row items-center gap-3">
           <span
             className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${status.className}`}
           >
             {status.label}
           </span>
 
+          {act.status !== 'generating' && (
+            <Link href={`/acts/${act.id}/edit`}>
+              <Button
+                variant="outline"
+                className="gap-2 cursor-pointer border-slate-200 text-slate-600 hover:bg-slate-50"
+              >
+                <Edit2 size={16} />
+                Редагувати
+              </Button>
+            </Link>
+          )}
+
           {act.status === 'draft' || act.status === 'failed' ? (
             <Button
               onClick={handleGeneratePdf}
               disabled={isPending}
-              className="bg-blue-600 hover:bg-blue-700 text-white gap-2"
+              className="bg-blue-600 w-fit cursor-pointer hover:bg-blue-700 text-white gap-2"
             >
               {isPending ? (
                 <>
@@ -128,7 +135,7 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
 
           {act.status === 'ready' && (
             <a href={`/api/acts/${act.id}/pdf`} download>
-              <Button className="bg-green-600 hover:bg-green-700 text-white gap-2">
+              <Button className="bg-green-600 cursor-pointer hover:bg-green-700 text-white gap-2">
                 <Download size={16} />
                 Завантажити PDF
               </Button>

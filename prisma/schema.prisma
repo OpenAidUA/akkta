@@ -31,11 +31,12 @@ model User {
 }
 
 model Organization {
-    id        String   @id @default(uuid())
-    name      String
-    edrpou    String?
-    avatarUrl String?
-    createdAt DateTime @default(now())
+    id             String   @id @default(uuid())
+    name           String
+    edrpou         String?
+    representative String?
+    avatarUrl      String?
+    createdAt      DateTime @default(now())
 
     members OrganizationMember[]
     clients Client[]

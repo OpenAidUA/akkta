@@ -10,9 +10,9 @@ import { useSidebar } from '@/shared/providers/SidebarProvider';
 import { useEffect } from 'react';
 
 const nav = [
-  { name: 'Дашборд', href: '/', icon: <Home size={16} /> },
-  { name: 'Акти', href: '/acts', icon: <FileText size={16} /> },
-  { name: 'Клієнти', href: '/clients', icon: <User size={16} /> },
+  { name: 'Дашборд', href: '/', icon: <Home size={24} /> },
+  { name: 'Акти', href: '/acts', icon: <FileText size={24} /> },
+  { name: 'Клієнти', href: '/clients', icon: <User size={24} /> },
 ];
 
 function SidebarContent() {
@@ -24,7 +24,7 @@ function SidebarContent() {
     <>
       <div className="flex items-center justify-between px-6 py-5 mb-4">
         <div className="flex gap-3 items-center">
-          <Image width={40} height={40} src="/logo.png" alt="logo" />
+          <Image width={50} height={50} src="/logo.png" alt="logo" />
           <p className="text-xl font-bold">Clarus Acts</p>
         </div>
         <button
@@ -62,11 +62,11 @@ function SidebarContent() {
       {/* Logout */}
       <div className="border-t border-slate-800 px-4 py-4">
         <button
-          className="flex items-center gap-2 text-sm text-slate-400 hover:text-slate-200 transition-colors"
+          className="flex items-center gap-2 text-lg cursor-pointer text-slate-400 hover:text-slate-200 transition-colors"
           onClick={signOut}
           type="button"
         >
-          <LogOut size={16} />
+          <LogOut size={24} />
           Вийти
         </button>
       </div>
