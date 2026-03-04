@@ -33,8 +33,8 @@ export default function LoginPage() {
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 font-sans">
       <div className="flex items-center gap-2 mb-6">
         <div className="flex gap-3 px-6 py-5 items-center">
-          <Image width={40} height={40} src="/logo.png" alt="logo" />
-          <p className="text-xl font-bold">Clarus Acts</p>
+          <Image width={80} height={70} src="/mascot.png" alt="logo" />
+          <p className="text-[65px] font-bold">Acta</p>
         </div>
       </div>
 
@@ -65,7 +65,11 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="name@company.com"
-              className={errors.email ? 'border-red-400 focus-visible:ring-red-400/40' : ''}
+              className={
+                errors.email
+                  ? 'border-red-400 focus-visible:ring-red-400/40'
+                  : ''
+              }
               {...register('email')}
             />
             {errors.email && (
@@ -92,7 +96,11 @@ export default function LoginPage() {
               id="password"
               type="password"
               placeholder="••••••••"
-              className={errors.password ? 'border-red-400 focus-visible:ring-red-400/40' : ''}
+              className={
+                errors.password
+                  ? 'border-red-400 focus-visible:ring-red-400/40'
+                  : ''
+              }
               {...register('password')}
             />
             {errors.password && (

@@ -22,10 +22,10 @@ function SidebarContent() {
 
   return (
     <>
-      <div className="flex items-center justify-between px-6 py-5 mb-4">
-        <div className="flex gap-3 items-center">
-          <Image width={50} height={50} src="/logo.png" alt="logo" />
-          <p className="text-xl font-bold">Clarus Acts</p>
+      <div className="flex items-center justify-between px-6 py-5">
+        <div className="flex gap-3 items-center justify-center mx-auto">
+          <Image width={60} height={50} src="/mascot.png" alt="logo" />
+          <h2 className="text-[65px] font-bold">Acta</h2>
         </div>
         <button
           onClick={close}

@@ -35,8 +35,8 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#F8FAFC] flex flex-col items-center justify-center p-4 font-sans">
       <div className="flex items-center gap-2 mb-6">
         <div className="flex gap-3 px-6 py-5 items-center">
-          <Image width={40} height={40} src="/logo.png" alt="logo" />
-          <p className="text-xl font-bold">Clarus Acts</p>
+          <Image width={80} height={70} src="/mascot.png" alt="logo" />
+          <p className="text-[65px] font-bold">Acta</p>
         </div>
       </div>
 
