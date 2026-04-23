@@ -38,7 +38,12 @@ export async function middleware(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // Public paths
-  if (path === '/login' || path === '/register') {
+  if (
+    path === '/login' ||
+    path === '/register' ||
+    path === '/privacy' ||
+    path === '/terms'
+  ) {
     return response;
   }
 
@@ -54,14 +59,6 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - api (API routes) -> We exclude API to prevent excessive redirects,
-     *   but you should protect API routes individually or here if needed.
-     */
     '/((?!_next/static|_next/image|favicon.ico|api|manifest.json|sw.js|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

@@ -1,19 +1,28 @@
 import { NextResponse } from 'next/server';
-// import { getSessionUser } from '@/shared/auth';
 import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { createAct } from '@/modules/acts/service';
 import { ZodError } from 'zod';
+import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { getOrganizationByUserId } from '@/modules/organizations/service';
 
 export async function POST(req: Request) {
   try {
-    // const user = await getSessionUser();
-    // if (!user) {
-    //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    // }
+    const supabase = await createSupabaseServerClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
 
-    // TODO: replace hardcoded IDs with real auth context
-    const organizationId = '122';
-    const userId = '122';
+    if (!user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const org = await getOrganizationByUserId(user.id);
+    if (!org) {
+      return NextResponse.json({ error: 'Organization not found' }, { status: 403 });
+    }
+
+    const organizationId = org.id;
+    const userId = user.id;
 
     const body = await req.json();
     const parsed = CreateActRequestSchema.parse(body);

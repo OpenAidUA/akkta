@@ -47,7 +47,18 @@ export function AuthProvider({
   }, [router]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      // Call server route to clear server-side auth cookies as well
+      await fetch('/api/auth/signout', { method: 'POST' });
+    } catch (e) {
+      console.error('Signout fetch error', e);
+    }
+    // Also clear client session
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      // ignore
+    }
     router.push('/login');
   };
 

@@ -5,8 +5,8 @@ import { useActionState, startTransition } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginAction } from './action';
-import { loginSchema, type LoginSchema } from './schema';
+import { loginAction } from '../login/action';
+import { loginSchema, type LoginSchema } from '../login/schema';
 
 export default function LoginPage() {
   const [state, action, isPending] = useActionState(loginAction, null);
@@ -40,10 +40,10 @@ export default function LoginPage() {
 
       <div className="bg-white w-full max-w-110 p-10 rounded-xl shadow-[0_4px_20px_rgba(0,0,0,0.05)] border border-gray-100">
         <h1 className="text-2xl font-bold text-center text-[#1E293B] mb-2">
-          З поверненням
+          Відновлення пароля
         </h1>
         <p className="text-[#64748B] text-center mb-8 text-[15px]">
-          Введіть свої дані, щоб увійти до аккаунту
+          Введіть свою пошту, щоб отримати інструкції для відновлення пароля
         </p>
 
         <form className="space-y-5 mb-4" onSubmit={handleSubmit(onSubmit)}>
@@ -84,46 +84,6 @@ export default function LoginPage() {
             )}
           </div>
 
-          {/* Password Field*/}
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label
-                className="text-sm font-semibold text-[#1E293B] ml-0.5"
-                htmlFor="password"
-              >
-                Пароль
-              </Label>
-              <Link
-                href="/recovery"
-                className="text-[#3170D4] text-sm font-semibold hover:underline ml-2"
-              >
-                Забули пароль?
-              </Link>
-            </div>
-
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              className={
-                errors.password
-                  ? 'border-red-400 focus-visible:ring-red-400/40'
-                  : ''
-              }
-              {...register('password')}
-            />
-            {errors.password && (
-              <p className="text-red-500 text-xs ml-1">
-                {errors.password.message}
-              </p>
-            )}
-            {!errors.password && state?.errors?.password && (
-              <p className="text-red-500 text-xs ml-1">
-                {state.errors.password.join(', ')}
-              </p>
-            )}
-          </div>
-
           <Button
             type="submit"
             disabled={isPending}
@@ -133,37 +93,18 @@ export default function LoginPage() {
             {isPending && (
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />
             )}
-            {isPending ? 'Вхід...' : 'Увійти'}
+            {isPending ? 'Відправка...' : 'Відправити'}
           </Button>
         </form>
 
-        {/* Separator OR */}
-        {/* <div className="relative my-8">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-white px-3 text-[#94A3B8] font-medium tracking-wider">
-              OR
-            </span>
-          </div>
-        </div> */}
-
-        {/* Google Sign Up */}
-        {/* <button className="w-full flex items-center justify-center gap-3 border border-gray-200 py-2.5 rounded-lg hover:bg-gray-50 transition-colors mb-8">
-          <span className="text-[#1E293B] font-medium">
-            Sign up with Google
-          </span>
-        </button> */}
-
         {/* Footer */}
         <p className="text-center text-[15px] text-[#64748B]">
-          Ще не спробували?
+          Згадали пароль?
           <Link
-            href="/register"
+            href="/login"
             className="text-[#3170D4] font-semibold hover:underline ml-2"
           >
-            Зареєструватись
+            Увійти
           </Link>
         </p>
       </div>

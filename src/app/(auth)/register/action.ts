@@ -38,6 +38,19 @@ export async function registerAction(
   const { email, password, name, organizationName } = validatedFields.data;
   const cookieStore = await cookies();
 
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
+    console.error('Missing Supabase env vars', {
+      NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+    });
+    return {
+      errors: {
+        _form: ['Server configuration error. Contact administrator.'],
+      },
+      message: 'Server configuration error.',
+    };
+  }
+
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
@@ -74,9 +87,10 @@ export async function registerAction(
   });
 
   if (authError) {
+    console.error('Supabase signUp error:', authError);
     return {
       errors: {
-        _form: [authError.message],
+        _form: [authError.message || 'Unknown error'],
       },
       message: 'Сталась помилка при створенні користувача.',
     };

@@ -177,6 +177,25 @@ export default function SignUpPage() {
             )}
           </div>
 
+          <p className="text-xs text-center text-[#64748B]">
+            Натискаючи "Зареєструватись", ви погоджуєтесь з нашими{' '}
+            <Link
+              href="/terms"
+              target="_blank"
+              className="text-[#3170D4] font-semibold hover:underline ml-2"
+            >
+              умовами використання
+            </Link>{' '}
+            та
+            <Link
+              href="/privacy"
+              target="_blank"
+              className="text-[#3170D4] font-semibold hover:underline ml-2"
+            >
+              політикою конфіденційності
+            </Link>
+          </p>
+
           <Button
             type="submit"
             disabled={isPending}
