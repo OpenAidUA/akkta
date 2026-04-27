@@ -58,18 +58,6 @@ function SidebarContent() {
           );
         })}
       </nav>
-
-      {/* Logout */}
-      <div className="border-t border-slate-800 px-4 py-4">
-        <button
-          className="flex items-center gap-2 text-lg cursor-pointer text-slate-400 hover:text-slate-200 transition-colors"
-          onClick={signOut}
-          type="button"
-        >
-          <LogOut size={24} />
-          Вийти
-        </button>
-      </div>
     </>
   );
 }

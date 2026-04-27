@@ -1,27 +1,13 @@
 'use client';
 
-import React from 'react';
 import Image from 'next/image';
-import Link from 'next/link';
 import { Menu } from 'react-feather';
-import { useSidebar } from '@/shared/providers/SidebarProvider';
-import { useAuth } from '@/shared/providers/AuthProvider';
 
-function getInitials(name: string): string {
-  return name
-    .split(' ')
-    .filter(Boolean)
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join('')
-    .toUpperCase();
-}
+import { useSidebar } from '@/shared/providers/SidebarProvider';
+import { ProfileDropdown } from '@/components/widgets/profile/ProfileDropdown';
 
 export default function Header() {
-  const { open } = useSidebar();
-  const { userName, orgName } = useAuth();
-
-  const initials = getInitials(userName || 'U');
+  const { open: openSidebar } = useSidebar();
 
   return (
     <header className="sticky top-0 z-30 flex items-center justify-between bg-white/80 backdrop-blur-md border-b border-slate-100 px-4 py-2.5 lg:px-8">
@@ -29,7 +15,7 @@ export default function Header() {
       <div className="flex items-center gap-3">
         {/* Burger — mobile only */}
         <button
-          onClick={open}
+          onClick={openSidebar}
           className="p-2 -ml-1 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors lg:hidden"
           aria-label="Відкрити меню"
         >
@@ -42,24 +28,8 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Right side — avatar */}
-      <div className="flex items-center gap-3">
-        <div className="hidden sm:block text-right">
-          <p className="text-sm font-medium text-slate-900 leading-tight">
-            {userName || 'User'}
-          </p>
-          {orgName && (
-            <p className="text-xs text-slate-400 leading-tight">{orgName}</p>
-          )}
-        </div>
-        <Link
-          href="/settings"
-          className="flex items-center justify-center w-9 h-9 rounded-full bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition-colors"
-          title="Налаштування"
-        >
-          {initials}
-        </Link>
-      </div>
+      {/* Right side — avatar with dropdown */}
+      <ProfileDropdown />
     </header>
   );
 }
