@@ -45,7 +45,7 @@ export function StatCards({ stats }: StatCardsProps) {
   };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6">
       {cards.map((card) => {
         const Icon = card.icon;
         return (
@@ -63,7 +63,7 @@ export function StatCards({ stats }: StatCardsProps) {
                 <Icon size={18} />
               </div>
             </div>
-            <p className="text-2xl sm:text-3xl font-bold text-slate-900">
+            <p className="text-2xl md:text-3xl font-bold text-slate-900 truncate">
               {card.value}
             </p>
           </div>
