@@ -19,6 +19,7 @@ export async function createActAction(
   data: CreateActRequest,
 ): Promise<CreateActState> {
   const supabase = await createSupabaseServerClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();

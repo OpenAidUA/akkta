@@ -178,7 +178,7 @@ export default function SignUpPage() {
           </div>
 
           <p className="text-xs text-center text-[#64748B]">
-            Натискаючи "Зареєструватись", ви погоджуєтесь з нашими{' '}
+            Натискаючи «Зареєструватись», ви погоджуєтесь з нашими{' '}
             <Link
               href="/terms"
               target="_blank"
