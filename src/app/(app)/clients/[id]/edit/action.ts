@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import { prisma } from '@/lib/db';
 
 export type UpdateClientState = {
-  errors?: any;
+  errors?: Record<string, string[]>;
   message?: string;
 } | null;
 

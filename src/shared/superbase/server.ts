@@ -11,10 +11,15 @@ export const createSupabaseServerClient = async () => {
     {
       cookies: {
         getAll() {
-          return requestHeaders.get('cookie')?.split('; ').map((cookie) => {
-            const [name, ...rest] = cookie.split('=');
-            return { name, value: rest.join('=') };
-          }) ?? [];
+          return (
+            requestHeaders
+              .get('cookie')
+              ?.split('; ')
+              .map((cookie) => {
+                const [name, ...rest] = cookie.split('=');
+                return { name, value: rest.join('=') };
+              }) ?? []
+          );
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value, options }) => {
