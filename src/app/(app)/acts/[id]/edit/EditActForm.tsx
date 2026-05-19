@@ -1,6 +1,11 @@
 'use client';
 
-import { useForm, type FieldErrors, type FieldPath } from 'react-hook-form';
+import {
+  useForm,
+  useWatch,
+  type FieldErrors,
+  type FieldPath,
+} from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, ArrowRight, Save } from 'react-feather';
@@ -56,7 +61,10 @@ export default function EditActForm({ act, clients }: EditActFormProps) {
     mode: 'onTouched',
   });
 
-  const clientName = watch('client.snapshot.name');
+  const clientName = useWatch({
+    control,
+    name: 'client.snapshot.name',
+  });
 
   useEffect(() => {
     setValue('act.parties.client.name', clientName || '');
@@ -102,7 +110,8 @@ export default function EditActForm({ act, clients }: EditActFormProps) {
         </h1>
         {act.status !== 'draft' && (
           <div className="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-lg text-sm text-amber-800">
-            ⚠️ Після збереження PDF стане недійсним — акт повернеться до статусу «Чернетка».
+            ⚠️ Після збереження PDF стане недійсним — акт повернеться до статусу
+            «Чернетка».
           </div>
         )}
         <FormStepper currentStep={currentStep} />
