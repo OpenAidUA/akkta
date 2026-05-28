@@ -22,10 +22,10 @@ function SidebarContent() {
 
   return (
     <>
-      <div className="flex items-center justify-between px-6 py-5">
-        <div className="flex gap-3 items-center justify-center mx-auto">
-          <Image width={60} height={50} src="/mascot.png" alt="logo" />
-          <h2 className="text-[65px] font-bold">Acta</h2>
+      <div className="flex items-center justify-between px-6 py-2 mb-4">
+        <div className="flex gap-3 items-center justify-center">
+          <Image width={35} height={30} src="/mascot.png" alt="logo" />
+          <h2 className="text-[38px] font-bold">Akkta</h2>
         </div>
         <button
           onClick={close}
@@ -65,7 +65,7 @@ function SidebarContent() {
 /** Desktop sidebar — always visible on lg+ */
 export function DesktopSidebar() {
   return (
-    <aside className="hidden lg:flex w-70 flex-col bg-sidebar text-slate-200 h-screen sticky top-0">
+    <aside className="hidden lg:flex w-68 flex-col bg-sidebar text-slate-200 h-screen sticky top-0">
       <SidebarContent />
     </aside>
   );
