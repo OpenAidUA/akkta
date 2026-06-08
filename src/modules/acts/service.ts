@@ -1,9 +1,12 @@
 import { prisma } from '@/lib/db';
-import { calculateTotals } from './helpers';
+
+import createSupabaseAdminClient from '@/shared/superbase/admin';
+import { calculateTotals, checksumBuffer } from './helpers';
 import { CreateActRequest } from './domain';
 import type { ActWithClient } from './types';
 import { generateActPdf } from './pdf';
-import crypto from 'crypto';
+
+const PDF_BUCKET = process.env.SUPABASE_PDFS_BUCKET || 'acts-pdfs';
 
 export async function createAct(
   organizationId: string,
@@ -152,10 +155,7 @@ export async function generateAndSaveActPdf(
       clientSnapshot: act.clientSnapshot,
     });
 
-    const checksum = crypto
-      .createHash('sha256')
-      .update(pdfBuffer)
-      .digest('hex');
+    const checksum = checksumBuffer(pdfBuffer);
 
     // Check if identical PDF already exists
     const existing = await prisma.actPdf.findFirst({
@@ -163,6 +163,7 @@ export async function generateAndSaveActPdf(
     });
 
     if (existing) {
+      const { fileUrl } = await uploadPdfBuffer(actId, pdfBuffer, checksum);
       await prisma.act.update({
         where: { id: actId },
         data: { status: 'ready' },
@@ -172,12 +173,17 @@ export async function generateAndSaveActPdf(
 
     // Store as file URL placeholder — in production, upload to Supabase Storage
     // and store the real URL. For now we store a marker.
+
+    const { fileUrl } = await uploadPdfBuffer(actId, pdfBuffer, checksum);
+
+    console.log(fileUrl);
+
     const actPdf = await prisma.actPdf.create({
       data: {
         actId,
         templateVersion: act.templateVersion,
         checksum,
-        fileUrl: `/api/acts/${actId}/pdf`,
+        fileUrl: fileUrl,
         size: pdfBuffer.length,
       },
     });
@@ -189,10 +195,55 @@ export async function generateAndSaveActPdf(
 
     return { pdfBuffer, actPdfId: actPdf.id };
   } catch (error) {
+    console.log('Error generating PDF:', error);
     await prisma.act.update({
       where: { id: actId },
       data: { status: 'failed' },
     });
     throw error;
   }
+}
+
+export async function uploadPdfBuffer(
+  actId: string,
+  buf: Buffer,
+  checksum: string,
+) {
+  const supabaseAdmin = createSupabaseAdminClient();
+  const filePath = `acts/${actId}/${checksum}.pdf`;
+
+  console.log(supabaseAdmin, PDF_BUCKET, 'Uploading PDF...');
+
+  // 1) Check existence: list the exact path's parent and see if file exists
+  const parentDir = `acts/${actId}`;
+  console.log('0', 'actId:', actId);
+  // const { data: listData, error: listErr } = await supabaseAdmin.storage
+  //   .from(PDF_BUCKET)
+  //   .list(parentDir, { search: `${checksum}.pdf` });
+  // if (listErr) throw listErr;
+  // console.log('1');
+  // const exists = !!(
+  //   listData && listData.find((f) => f.name === `${checksum}.pdf`)
+  // );
+  console.log('2', PDF_BUCKET);
+  if (!false) {
+    const { error: uploadErr } = await supabaseAdmin.storage
+      .from(PDF_BUCKET)
+      .upload(filePath, buf, {
+        contentType: 'application/pdf',
+        upsert: false,
+      });
+    console.log('3');
+    if (uploadErr) throw uploadErr;
+  }
+
+  // 2) Get signed URL (recommended for private bucket)
+  const expiresIn = 60 * 60; // 1 hour
+  const { data: signedData, error: signedErr } = await supabaseAdmin.storage
+    .from(PDF_BUCKET)
+    .createSignedUrl(filePath, expiresIn);
+  if (signedErr) throw signedErr;
+
+  // 3) Optionally get metadata (size) — supabase-js may not expose metadata directly; if needed, store size from buf.length
+  return { filePath, fileUrl: signedData.signedUrl, size: buf.length };
 }
