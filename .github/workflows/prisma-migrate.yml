@@ -1,0 +1,25 @@
+name: Deploy migrations
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [alpha]
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
+        with:
+          node-version: '18'
+      - name: Install
+        run: npm ci
+      - name: Run migrations
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        run: |
+          npx prisma migrate deploy
+          npx prisma db seed
