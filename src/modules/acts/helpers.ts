@@ -1,3 +1,5 @@
+import crypto from 'crypto';
+
 import { ActDocument, ActDocumentSchema } from './domain';
 import { amountToWordsUAH } from './amount-to-words';
 
@@ -34,3 +36,7 @@ export function calculateTotals(raw: ActDocument): ActDocument {
   // Final server-side validation — throws on invalid data
   return ActDocumentSchema.parse(out);
 }
+
+export const checksumBuffer = (buf: Buffer): string => {
+  return crypto.createHash('sha256').update(buf).digest('hex');
+};
