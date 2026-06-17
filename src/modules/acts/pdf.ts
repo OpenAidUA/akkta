@@ -1,18 +1,32 @@
 import 'server-only';
-import { chromium, type Browser } from 'playwright-core';
+import playwright, { chromium, type Browser } from 'playwright-core';
 import { renderActHtml, type ActTemplateData } from './template';
 
 let browserInstance: Browser | null = null;
+
+const isLocal = process.env.NODE_ENV === 'development';
 
 async function getBrowser(): Promise<Browser> {
   if (browserInstance?.isConnected()) {
     return browserInstance;
   }
 
-  browserInstance = await chromium.launch({
-    headless: true,
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-  });
+  if (isLocal) {
+    browserInstance = await chromium.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      executablePath:
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+    });
+  } else {
+    const chromium = (await import('@sparticuz/chromium')).default;
+
+    browserInstance = await playwright.chromium.launch({
+      args: chromium.args,
+      executablePath: await chromium.executablePath(),
+      headless: true,
+    });
+  }
 
   return browserInstance;
 }
