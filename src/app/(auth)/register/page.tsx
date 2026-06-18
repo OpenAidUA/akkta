@@ -66,7 +66,7 @@ export default function SignUpPage() {
             <Input
               id="name"
               type="text"
-              placeholder="John Doe"
+              placeholder="Ваше ім'я"
               className={
                 errors.name
                   ? 'border-red-400 focus-visible:ring-red-400/40'
@@ -95,7 +95,7 @@ export default function SignUpPage() {
             <Input
               id="organizationName"
               type="text"
-              placeholder="My Company LLC"
+              placeholder="Назва вашої компанії або організації"
               className={
                 errors.organizationName
                   ? 'border-red-400 focus-visible:ring-red-400/40'
@@ -157,7 +157,7 @@ export default function SignUpPage() {
             <Input
               id="password"
               type="password"
-              placeholder="Create a password"
+              placeholder="Створіть надійний пароль мінімум з 10 символів"
               className={
                 errors.password
                   ? 'border-red-400 focus-visible:ring-red-400/40'
