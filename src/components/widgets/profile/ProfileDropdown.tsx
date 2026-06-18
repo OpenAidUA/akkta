@@ -79,13 +79,13 @@ export const ProfileDropdown = () => {
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator className="h-px my-1 bg-slate-200" />
-              <DropdownMenuItem className="rounded-md text-gray-400  flex gap-2 p-2 border-transparen hover:bg-accent/10">
-                <LogOut size={22} />
+              <DropdownMenuItem className="rounded-md text-gray-400  border-transparen hover:bg-accent/10">
                 <button
                   type="button"
-                  className="text-sm cursor-pointer text-slate-600"
+                  className="text-sm flex gap-2 p-2 cursor-pointer text-slate-600"
                   onClick={signOut}
                 >
+                  <LogOut size={22} />
                   Вийти
                 </button>
               </DropdownMenuItem>
