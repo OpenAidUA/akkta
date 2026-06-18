@@ -49,6 +49,7 @@ function formatMoney(n: number): string {
 
 export default function ActDetailView({ act }: ActDetailViewProps) {
   const [isPending, startTransition] = useTransition();
+  const [isDownloading, setIsDownloading] = useState(false);
   const [message, setMessage] = useState<{
     text: string;
     error: boolean;
@@ -79,6 +80,31 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
         });
       }
     });
+  };
+
+  const handleDownload = async (actId: string) => {
+    setIsDownloading(true);
+
+    try {
+      const response = await fetch(`/api/acts/${actId}/pdf`);
+      if (!response.ok) throw new Error('Download failed');
+
+      // Превращаем ответ в Blob (бинарный файл)
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+
+      // Создаем временную ссылку для "нажатия"
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `act-${actId}.pdf`; // Можно задать имя файла
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    } catch (error) {
+      console.error('Ошибка скачивания:', error);
+    } finally {
+      setIsDownloading(false);
+    }
   };
 
   return (
@@ -134,12 +160,18 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
           ) : null}
 
           {act.status === 'ready' && (
-            <a href={`/api/acts/${act.id}/pdf`} download>
-              <Button className="bg-green-600 cursor-pointer hover:bg-green-700 text-white gap-2">
+            <Button
+              className="bg-green-600 w-fit hover:bg-green-700 text-white gap-2"
+              disabled={isDownloading}
+              onClick={() => handleDownload(act.id)}
+            >
+              {isDownloading ? (
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent mr-2" />
+              ) : (
                 <Download size={16} />
-                Завантажити PDF
-              </Button>
-            </a>
+              )}
+              {isDownloading ? 'Завантаження...' : 'Завантажити PDF'}
+            </Button>
           )}
         </div>
       </div>
