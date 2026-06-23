@@ -1,7 +1,7 @@
 {
-  "name": "Acta",
-  "short_name": "Acta",
-  "description": "Acta PWA",
+  "name": "Akkta",
+  "short_name": "Akkta",
+  "description": "Akkta PWA",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
