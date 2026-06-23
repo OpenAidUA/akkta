@@ -13,14 +13,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Clarus Acts',
+  title: 'Akkta',
   description:
-    'Clarus Acts — сервіс для створення актів виконаних робіт у PDF. Просто, швидко, професійно.',
+    'Akkta — сервіс для створення актів виконаних робіт у PDF. Просто, швидко, професійно.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Clarus Acts',
+    title: 'Akkta',
   },
   formatDetection: {
     telephone: false,
