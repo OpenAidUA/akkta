@@ -5,7 +5,7 @@ export const ActItemSchema = z.object({
   title: z.string().min(1),
   description: z.string().optional(),
   quantity: z.number().positive(),
-  unitPrice: z.number().nonnegative(),
+  unitPrice: z.number().nonnegative().min(0.01),
   total: z.number().optional(),
 });
 
@@ -51,5 +51,3 @@ export const ActDocumentSchema = z.object({
 });
 
 export type ActDocument = z.infer<typeof ActDocumentSchema>;
-
-

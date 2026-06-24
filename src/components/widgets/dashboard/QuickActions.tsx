@@ -42,7 +42,12 @@ export function QuickActions({
           <AlertCircle size={20} className="text-blue-600 shrink-0 mt-0.5" />
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-blue-900 mb-1">
-              У вас {draftsCount} {draftsCount === 1 ? 'чернетка' : draftsCount < 5 ? 'чернетки' : 'чернеток'}
+              У вас {draftsCount}{' '}
+              {draftsCount === 1
+                ? 'чернетка'
+                : draftsCount < 5
+                  ? 'чернетки'
+                  : 'чернеток'}
             </h3>
             <p className="text-xs text-blue-700 mb-3">
               Завершіть створення актів, щоб згенерувати PDF
@@ -60,11 +65,11 @@ export function QuickActions({
       )}
 
       {/* Quick actions card */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+      <div className="bg-white @container rounded-xl border border-slate-200 shadow-sm p-6">
         <h2 className="text-lg font-semibold text-slate-900 mb-4">
           Швидкі дії
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 gap-3 @[290px]:grid-cols-1 @[320px]:grid-cols-2">
           <Link href="/acts/create" className="block">
             <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white gap-2 justify-start">
               <Plus size={18} />
