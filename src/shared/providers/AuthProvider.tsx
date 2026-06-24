@@ -24,6 +24,10 @@ export function AuthProvider({
   const [user, setUser] = useState<User | null>(initialUser);
   const router = useRouter();
 
+  useEffect(() => {
+    setUser(initialUser);
+  }, [initialUser]);
+
   // Keep user sync with supabase auth state
   useEffect(() => {
     const {
