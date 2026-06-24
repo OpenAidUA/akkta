@@ -1,5 +1,7 @@
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, Controller } from 'react-hook-form';
 import { Plus, Trash2 } from 'react-feather';
+import { NumericFormat } from 'react-number-format';
+
 import { Button, Input, Label } from '@/components/ui';
 import type { StepProps } from '../../../app/(app)/acts/create/types';
 
@@ -53,14 +55,33 @@ export default function StepItems({ register, errors, control }: StepProps) {
                 <Label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                   Ціна (грн) <span className="text-red-400">*</span>
                 </Label>
-                <Input
-                  type="number"
-                  step="0.01"
-                  className={`h-9 text-sm ${errors.act?.items?.[index]?.unitPrice ? 'border-red-400 focus-visible:ring-red-400/40' : ''}`}
-                  {...register(`act.items.${index}.unitPrice` as const, {
-                    valueAsNumber: true,
-                  })}
+
+                <Controller
+                  name={`act.items.${index}.unitPrice` as const}
+                  control={control}
+                  render={({
+                    field: { onChange, value, ref, name, onBlur },
+                  }) => (
+                    <NumericFormat
+                      customInput={Input}
+                      getInputRef={ref}
+                      name={name}
+                      value={value === 0 ? '' : value}
+                      thousandSeparator=" "
+                      decimalSeparator="."
+                      decimalScale={2}
+                      fixedDecimalScale
+                      allowNegative={false}
+                      placeholder="0.00"
+                      onValueChange={(values) => {
+                        onChange(values.floatValue ?? 0);
+                      }}
+                      onBlur={onBlur}
+                      className={`h-9 text-sm ${errors.act?.items?.[index]?.unitPrice ? 'border-red-400 focus-visible:ring-red-400/40' : ''}`}
+                    />
+                  )}
                 />
+
                 {errors.act?.items?.[index]?.unitPrice && (
                   <p className="text-red-500 text-xs mt-0.5">
                     {errors.act.items[index].unitPrice.message}

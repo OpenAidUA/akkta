@@ -1,6 +1,6 @@
 'use client';
 
-import { User, Lock, Shield, LogOut } from 'react-feather';
+import { LogOut } from 'react-feather';
 
 import Link from 'next/link';
 
@@ -14,6 +14,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuSeparator,
 } from '@radix-ui/react-dropdown-menu';
+
+import { dropdownConfig } from './DropdownConfig';
 
 function getInitials(name: string): string {
   return name
@@ -59,27 +61,26 @@ export const ProfileDropdown = () => {
               className="min-w-48 bottom-10 bg-white rounded-md shadow-lg border border-slate-200 p-1"
             >
               <DropdownMenuGroup>
-                <DropdownMenuItem className="rounded-md text-gray-400 flex gap-2 p-2 border-transparen hover:bg-accent/10 focus-visible:border-none">
-                  <User size={22} />
-                  <Link href="/settings" className="text-sm text-slate-600">
-                    Налаштування
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="rounded-md text-gray-400  flex gap-2 p-2 border-transparen hover:bg-accent/10">
-                  <Lock size={22} />
-                  <Link href="/privacy" className="text-sm  text-slate-600">
-                    Політика конфіденційності
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="rounded-md text-gray-400  flex gap-2 p-2 border-transparen hover:bg-accent/10">
-                  <Shield size={22} />
-                  <Link href="/terms" className="text-sm  text-slate-600">
-                    Умови використання
-                  </Link>
-                </DropdownMenuItem>
+                {dropdownConfig.map((item) => (
+                  <DropdownMenuItem
+                    key={item.link}
+                    asChild
+                    className="rounded-md text-gray-400 border-transparen hover:bg-accent/10 focus-visible:border-none"
+                  >
+                    <Link
+                      href={item.link}
+                      className="text-sm flex gap-2 p-2 text-slate-600"
+                    >
+                      {item.icon}
+                      {item.label}
+                    </Link>
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuGroup>
+
               <DropdownMenuSeparator className="h-px my-1 bg-slate-200" />
-              <DropdownMenuItem className="rounded-md text-gray-400  border-transparen hover:bg-accent/10">
+
+              <DropdownMenuItem className="rounded-md text-gray-400 border-transparen hover:bg-accent/10">
                 <button
                   type="button"
                   className="text-sm flex gap-2 p-2 cursor-pointer text-slate-600"
