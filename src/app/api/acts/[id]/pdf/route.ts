@@ -1,7 +1,10 @@
 import { NextResponse } from 'next/server';
 import { createSupabaseServerClient } from '@/shared/superbase/server';
-import { getActById } from '@/modules/acts/service';
-import { generateActPdf } from '@/modules/acts/pdf';
+import {
+  getActById,
+  getActPdf,
+  generateAndSaveActPdf,
+} from '@/modules/acts/service';
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -25,14 +28,41 @@ export async function GET(req: Request, context: RouteContext) {
       return NextResponse.json({ error: 'Act not found' }, { status: 404 });
     }
 
-    // Generate PDF on-the-fly
-    const pdfBuffer = await generateActPdf({
-      act: act.data,
-      clientSnapshot: act.clientSnapshot,
-    });
-
     const filename = `act-${act.data.meta.number || act.id}.pdf`;
     const encodedFilename = encodeURIComponent(filename);
+
+    // Try to find an existing stored PDF (most efficient)
+    const existing = await getActPdf(act.id);
+
+    if (existing?.fileUrl) {
+      try {
+        const fileRes = await fetch(existing.fileUrl);
+
+        if (fileRes.ok) {
+          const arrayBuffer = await fileRes.arrayBuffer();
+          const buffer = Buffer.from(arrayBuffer);
+
+          return new NextResponse(new Uint8Array(buffer), {
+            headers: {
+              'Content-Type': 'application/pdf',
+              'Content-Disposition': `attachment; filename="act.pdf"; filename*=UTF-8''${encodedFilename}`,
+              'Content-Length': String(buffer.length),
+            },
+          });
+        } else {
+          console.warn(
+            'Failed to fetch saved PDF, will regenerate. Status:',
+            fileRes.status,
+          );
+        }
+      } catch (fetchErr) {
+        console.warn('Error fetching saved PDF, will regenerate:', fetchErr);
+      }
+      return;
+    }
+
+    // No saved PDF available or fetching failed — generate, upload and save, then return
+    const { pdfBuffer } = await generateAndSaveActPdf(act.id, user.id);
 
     return new NextResponse(new Uint8Array(pdfBuffer), {
       headers: {

@@ -41,10 +41,12 @@ const STATUS_MAP: Record<string, { label: string; className: string }> = {
 };
 
 function formatMoney(n: number): string {
-  return new Intl.NumberFormat('uk-UA', {
-    style: 'currency',
-    currency: 'UAH',
+  const formattedNumber = new Intl.NumberFormat('uk-UA', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
   }).format(n);
+
+  return `${formattedNumber} ₴`;
 }
 
 export default function ActDetailView({ act }: ActDetailViewProps) {
