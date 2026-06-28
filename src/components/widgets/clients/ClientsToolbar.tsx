@@ -41,11 +41,6 @@ export function ClientsToolbar({
   const [query, setQuery] = useState(search);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Keep local query in sync when server value changes (e.g. back/forward navigation)
-  useEffect(() => {
-    setQuery(search);
-  }, [search]);
-
   const updateParams = useCallback(
     (updates: Record<string, string | undefined>) => {
       const params = new URLSearchParams(searchParams.toString());
