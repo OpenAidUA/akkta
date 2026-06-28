@@ -1,9 +1,11 @@
 'use client';
 
-import { useActionState, startTransition } from 'react';
+import { useActionState, startTransition, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
+import { Eye, EyeOff } from 'react-feather';
 
+import { cn } from '@/lib/utils';
 import { Button, Input, Label } from '@/components/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginSchema } from '@/app/(auth)/login/schema';
@@ -11,6 +13,7 @@ import { loginAction } from '@/app/(auth)/login/action';
 
 const LoginForm = () => {
   const [state, action, isPending] = useActionState(loginAction, null);
+  const [showPassword, setShowPassword] = useState(false);
 
   const {
     register,
@@ -82,17 +85,28 @@ const LoginForm = () => {
           </Link>
         </div>
 
-        <Input
-          id="password"
-          type="password"
-          placeholder="••••••••"
-          className={
-            errors.password
-              ? 'border-red-400 focus-visible:ring-red-400/40'
-              : ''
-          }
-          {...register('password')}
-        />
+        <div className="relative">
+          <Input
+            id="password"
+            type={showPassword ? 'text' : 'password'}
+            placeholder="••••••••"
+            className={cn('pr-10', {
+              'border-red-400 focus-visible:ring-red-400/40': errors.password,
+            })}
+            {...register('password')}
+          />
+
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors focus:outline-none"
+            tabIndex={-1}
+            aria-label={showPassword ? 'Приховати пароль' : 'Показати пароль'}
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
+
         {errors.password && (
           <p className="text-red-500 text-xs ml-1">{errors.password.message}</p>
         )}
@@ -102,7 +116,6 @@ const LoginForm = () => {
           </p>
         )}
       </div>
-
       <Button
         type="submit"
         disabled={!isValid || isPending}
