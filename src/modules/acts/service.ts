@@ -212,38 +212,21 @@ export async function uploadPdfBuffer(
   const supabaseAdmin = createSupabaseAdminClient();
   const filePath = `acts/${actId}/${checksum}.pdf`;
 
-  console.log(supabaseAdmin, PDF_BUCKET, 'Uploading PDF...');
-
-  // 1) Check existence: list the exact path's parent and see if file exists
-  const parentDir = `acts/${actId}`;
   console.log('0', 'actId:', actId);
-  // const { data: listData, error: listErr } = await supabaseAdmin.storage
-  //   .from(PDF_BUCKET)
-  //   .list(parentDir, { search: `${checksum}.pdf` });
-  // if (listErr) throw listErr;
-  // console.log('1');
-  // const exists = !!(
-  //   listData && listData.find((f) => f.name === `${checksum}.pdf`)
-  // );
-  console.log('2', PDF_BUCKET);
-  if (!false) {
-    const { error: uploadErr } = await supabaseAdmin.storage
-      .from(PDF_BUCKET)
-      .upload(filePath, buf, {
-        contentType: 'application/pdf',
-        upsert: false,
-      });
-    console.log('3');
-    if (uploadErr) throw uploadErr;
+
+  const { error } = await supabaseAdmin.storage
+    .from(PDF_BUCKET)
+    .upload(filePath, buf, {
+      contentType: 'application/pdf',
+      upsert: false,
+    });
+
+  if (error && !error.message.includes('already exists')) {
+    throw error;
   }
 
-  // 2) Get signed URL (recommended for private bucket)
-  const expiresIn = 60 * 60; // 1 hour
-  const { data: signedData, error: signedErr } = await supabaseAdmin.storage
-    .from(PDF_BUCKET)
-    .createSignedUrl(filePath, expiresIn);
-  if (signedErr) throw signedErr;
-
-  // 3) Optionally get metadata (size) — supabase-js may not expose metadata directly; if needed, store size from buf.length
-  return { filePath, fileUrl: signedData.signedUrl, size: buf.length };
+  return {
+    fileUrl: filePath,
+    size: buf.length,
+  };
 }

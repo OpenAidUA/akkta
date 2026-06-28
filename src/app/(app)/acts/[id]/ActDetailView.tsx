@@ -91,14 +91,12 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
       const response = await fetch(`/api/acts/${actId}/pdf`);
       if (!response.ok) throw new Error('Download failed');
 
-      // Превращаем ответ в Blob (бинарный файл)
       const blob = await response.blob();
       const url = window.URL.createObjectURL(blob);
 
-      // Создаем временную ссылку для "нажатия"
       const a = document.createElement('a');
       a.href = url;
-      a.download = `act-${actId}.pdf`; // Можно задать имя файла
+      a.download = `act-${actId}.pdf`;
       document.body.appendChild(a);
       a.click();
       a.remove();

@@ -1,17 +1,19 @@
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FilePlus, Plus, FileText, Download } from 'react-feather';
+import { FilePlus, Plus, FileText } from 'react-feather';
 import EmptyPagePlaceholder from '@/shared/components/EmptyPage';
 import { createSupabaseServerClient } from '@/shared/superbase/server';
 import { getUserActs } from '@/modules/acts/service';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
 import OfflineSyncBanner from './OfflineSyncBanner';
+import { DownloadButton } from '@/components/widgets/acts/DownloadButton';
 
 export const dynamic = 'force-dynamic';
 
 export default async function Acts() {
   const supabase = await createSupabaseServerClient();
+
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -116,26 +118,15 @@ export default async function Acts() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      <div className="flex justify-end gap-2">
-                        <Link href={`/acts/${act.id}`}>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600"
-                          >
-                            <FileText size={16} />
-                          </Button>
+                      <div className="flex items-center justify-end gap-2">
+                        <Link
+                          className="h-8 w-8 p-2 rounded-md text-slate-400 hover:bg-blue-600/20"
+                          href={`/acts/${act.id}`}
+                        >
+                          <FileText size={16} />
                         </Link>
                         {act.status === 'ready' && (
-                          <a href={`/api/acts/${act.id}/pdf`} download>
-                            <Button
-                              variant="ghost"
-                              size="sm"
-                              className="h-8 w-8 p-0 text-slate-400 hover:text-blue-600"
-                            >
-                              <Download size={16} />
-                            </Button>
-                          </a>
+                          <DownloadButton actId={act.id} />
                         )}
                       </div>
                     </td>
