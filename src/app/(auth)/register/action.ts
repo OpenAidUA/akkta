@@ -4,7 +4,6 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 import { registerSchema } from './schema';
 import { redirect } from 'next/navigation';
-import { prisma } from '@/lib/db';
 
 export type RegisterState = {
   errors?: {
@@ -21,7 +20,7 @@ export async function registerAction(
   prevState: RegisterState,
   formData: FormData,
 ): Promise<RegisterState> {
-  const validatedFields = registerSchema.safeParse({
+  const validatedFields = await registerSchema.safeParseAsync({
     name: formData.get('name'),
     organizationName: formData.get('organizationName'),
     email: formData.get('email'),
@@ -38,10 +37,14 @@ export async function registerAction(
   const { email, password, name, organizationName } = validatedFields.data;
   const cookieStore = await cookies();
 
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY) {
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+  ) {
     console.error('Missing Supabase env vars', {
       NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
-      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
+      NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
+        !!process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     });
     return {
       errors: {
@@ -94,69 +97,6 @@ export async function registerAction(
       },
       message: 'Сталась помилка при створенні користувача.',
     };
-  }
-
-  if (!authData.user) {
-    return {
-      errors: {
-        _form: ['Сталася помилка. Користувача не створено.'],
-      },
-      message: 'Попередження реєстрації.',
-    };
-  }
-
-  const userId = authData.user.id;
-
-  try {
-    await prisma.$transaction(async (tx) => {
-      // Create User
-      const user = await tx.user.create({
-        data: {
-          id: userId,
-          name,
-          email,
-        },
-      });
-
-      // Create Organization
-      const organization = await tx.organization.create({
-        data: {
-          name: organizationName,
-          members: {
-            create: {
-              userId: user.id,
-              role: 'OWNER',
-            },
-          },
-        },
-      });
-
-      return { user, organization };
-    });
-  } catch (error) {
-    console.error('Prisma registration error:', error);
-    // Ideally, we should rollback Supabase user creation here if possible,
-    // but without Service Role key/Admin API we can't easily delete the auth user.
-    // In a production app, we might use a cleanup job or call an admin endpoint.
-    return {
-      errors: {
-        _form: [
-          'Не вдалося створити дані облікового запису. Спробуйте ще раз.',
-        ],
-      },
-      message: 'Помилка бази даних.',
-    };
-  }
-
-  // After successful registration, sign in the user to establish session
-  const { error: signInError } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (signInError) {
-    // Registration succeeded but auto-login failed, redirect to login page
-    redirect('/login?message=Registration successful. Please log in.');
   }
 
   // Redirect on success
