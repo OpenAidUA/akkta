@@ -11,7 +11,7 @@ const listClassName = 'list-disc space-y-2 pl-5 marker:text-slate-400';
 
 export default function TermsPage() {
   return (
-    <div className="max-w-4xl space-y-8 pb-8 text-slate-700">
+    <div className="max-w-4xl mx-auto space-y-8 pb-8 text-slate-700">
       <header className="flex items-start gap-3">
         <div className="mt-0.5 rounded-xl bg-blue-50 p-2 text-blue-600">
           <Shield size={20} aria-hidden="true" />
