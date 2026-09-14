@@ -2,6 +2,23 @@ import { createServerClient } from '@supabase/ssr';
 import { NextResponse, type NextRequest } from 'next/server';
 
 export async function middleware(request: NextRequest) {
+  const path = request.nextUrl.pathname;
+
+  // Public paths — skip Supabase auth check entirely
+  if (
+    path === '/login' ||
+    path === '/register' ||
+    path === '/privacy' ||
+    path === '/terms' ||
+    path === '/recovery'
+  ) {
+    return NextResponse.next({
+      request: {
+        headers: request.headers,
+      },
+    });
+  }
+
   let response = NextResponse.next({
     request: {
       headers: request.headers,
@@ -34,19 +51,6 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser();
-
-  const path = request.nextUrl.pathname;
-
-  // Public paths
-  if (
-    path === '/login' ||
-    path === '/register' ||
-    path === '/privacy' ||
-    path === '/terms' ||
-    path === '/recovery'
-  ) {
-    return response;
-  }
 
   // If no user, redirect to login
   if (!user) {

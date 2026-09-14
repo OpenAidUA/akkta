@@ -14,11 +14,13 @@ export const dropdownConfig = [
   {
     link: '/privacy',
     label: 'Політика конфіденційності',
+    external: true,
     icon: <Lock size={22} />,
   },
   {
     link: '/terms',
     label: 'Умови використання',
+    external: true,
     icon: <Shield size={22} />,
   },
 ];

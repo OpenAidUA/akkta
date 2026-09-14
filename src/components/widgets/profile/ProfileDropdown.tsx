@@ -69,6 +69,7 @@ export const ProfileDropdown = () => {
                   >
                     <Link
                       href={item.link}
+                      target={item.external ? '_blank' : '_self'}
                       className="text-sm flex gap-2 p-2 text-slate-600"
                     >
                       {item.icon}
