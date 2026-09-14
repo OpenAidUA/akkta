@@ -91,9 +91,7 @@ model Act {
 
     clientSnapshot Json
 
-    /**
-     * full  ActDocument (items, totals, meta, etc)
-     */
+    /// full ActDocument (items, totals, meta, etc)
     data Json
 
     templateVersion String
