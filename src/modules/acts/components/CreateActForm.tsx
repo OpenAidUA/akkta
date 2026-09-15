@@ -2,7 +2,7 @@
 
 import { useForm, type FieldErrors, type FieldPath } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { ArrowLeft, ArrowRight, Save, WifiOff } from 'react-feather';
 import Link from 'next/link';
 import { useTransition, useState, useEffect } from 'react';
@@ -17,10 +17,10 @@ import {
   type ActFormValues,
   STEPS,
 } from '../../../app/(app)/acts/create/types';
-import FormStepper from '../../widgets/acts/FormStepper';
-import StepMeta from '../../widgets/acts/StepMeta';
-import StepClient from '../../widgets/acts/StepClient';
-import StepItems from '../../widgets/acts/StepItems';
+import FormStepper from './FormStepper';
+import StepMeta from './StepMeta';
+import StepClient from './StepClient';
+import StepItems from './StepItems';
 
 const defaultValues: Partial<ActFormValues> = {
   act: {

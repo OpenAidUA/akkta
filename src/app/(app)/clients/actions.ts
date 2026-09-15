@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { deleteClient } from '@/modules/clients/service';
 import { revalidatePath } from 'next/cache';
 import { prisma } from '@/lib/db';

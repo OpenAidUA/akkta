@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from 'react';
 import { Trash2 } from 'react-feather';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { deleteClientAction } from '@/app/(app)/clients/actions';
 
 interface DeleteClientButtonProps {
@@ -32,9 +32,7 @@ export function DeleteClientButton({
   if (showConfirm) {
     return (
       <div className="flex items-center gap-1">
-        {error && (
-          <span className="text-red-500 text-xs mr-2">{error}</span>
-        )}
+        {error && <span className="text-red-500 text-xs mr-2">{error}</span>}
         <Button
           variant="ghost"
           size="sm"

@@ -4,7 +4,7 @@ import {
   MobileSidebar,
 } from '@/shared/components/layout/Sidebar';
 import Header from '@/shared/components/layout/Header';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { AuthProvider } from '@/shared/providers/AuthProvider';
 import { SidebarProvider } from '@/shared/providers/SidebarProvider';
 

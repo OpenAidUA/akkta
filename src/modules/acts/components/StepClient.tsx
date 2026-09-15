@@ -7,7 +7,7 @@ import {
   SelectValue,
   SelectContent,
   SelectItem,
-} from '@/components/ui';
+} from '@/shared/ui';
 import type { StepProps } from '../../../app/(app)/acts/create/types';
 
 export interface StepClientProps extends StepProps {

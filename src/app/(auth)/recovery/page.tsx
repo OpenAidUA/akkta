@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import RecoveryFlow from '@/components/widgets/auth/RecoveryFlow';
+import RecoveryFlow from '@/modules/auth/components/recovery/RecoveryFlow';
 
 export default function ResetPasswordPage() {
   return (

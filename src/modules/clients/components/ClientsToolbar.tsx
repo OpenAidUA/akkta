@@ -3,14 +3,14 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react';
 import { Search } from 'react-feather';
-import { Input } from '@/components/ui/input';
+import { Input } from '@/shared/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@/shared/ui/select';
 
 type SortField = 'name' | 'createdAt';
 type SortOrder = 'asc' | 'desc';

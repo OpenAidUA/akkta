@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { updateRecoveryPasswordAction } from '@/app/(auth)/recovery/action';
 import {
   type RecoveryPasswordSchema,

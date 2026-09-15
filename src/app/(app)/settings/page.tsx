@@ -1,6 +1,6 @@
 import { Settings } from 'react-feather';
 import { getOrganizationByUserId } from '@/modules/organizations/service';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import SettingsForm from './SettingsForm';
 
 export default async function SettingsPage() {

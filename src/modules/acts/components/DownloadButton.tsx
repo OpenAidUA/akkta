@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Download } from 'react-feather';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 export const DownloadButton = ({ actId }: { actId: string }) => {
   const [isDownloading, setIsDownloading] = useState(false);

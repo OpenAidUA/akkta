@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
-import createSupabaseAdminClient from '@/shared/superbase/admin';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
+import createSupabaseAdminClient from '@/shared/supabase/admin';
 import {
   getActById,
   getActPdf,

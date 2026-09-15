@@ -10,7 +10,7 @@ import {
   CheckCircle,
   AlertCircle,
 } from 'react-feather';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';

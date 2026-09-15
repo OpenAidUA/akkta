@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { createClient } from '@/modules/clients/service';
 import { CreateClientSchema } from '@/modules/clients/domain';
 import { redirect } from 'next/navigation';

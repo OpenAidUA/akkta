@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { updateOrganization } from '@/modules/organizations/service';
 import { UpdateOrganizationSchema } from '@/modules/organizations/domain';
 import { prisma } from '@/lib/db';

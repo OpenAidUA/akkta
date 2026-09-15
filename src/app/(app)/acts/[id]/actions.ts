@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { generateAndSaveActPdf } from '@/modules/acts/service';
 import { revalidatePath } from 'next/cache';
 

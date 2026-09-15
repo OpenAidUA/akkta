@@ -2,7 +2,7 @@ import { useFieldArray, Controller } from 'react-hook-form';
 import { Plus, Trash2 } from 'react-feather';
 import { NumericFormat } from 'react-number-format';
 
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import type { StepProps } from '../../../app/(app)/acts/create/types';
 
 export default function StepItems({ register, errors, control }: StepProps) {

@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { Eye, EyeOff } from 'react-feather';
 
 import { cn } from '@/lib/utils';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginSchema } from '@/app/(auth)/login/schema';
 import { loginAction } from '@/app/(auth)/login/action';

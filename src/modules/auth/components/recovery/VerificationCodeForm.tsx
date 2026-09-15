@@ -1,7 +1,7 @@
 import { useActionState, startTransition, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { verifyRecoveryCodeAction } from '@/app/(auth)/recovery/action';
 import {

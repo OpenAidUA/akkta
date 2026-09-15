@@ -1,9 +1,9 @@
 import { ArrowLeft } from 'react-feather';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import ClientForm from '@/components/forms/createClient/CreateClientForm';
+import ClientForm from '@/modules/clients/components/CreateClientForm';
 import { getClientById } from '@/modules/clients/service';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { prisma } from '@/lib/db';
 
 interface EditClientPageProps {

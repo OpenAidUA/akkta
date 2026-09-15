@@ -11,7 +11,7 @@ import Image from 'next/image';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AlertCircle, CheckCircle, Loader, Send, X } from 'react-feather';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import {
   FeedbackSchema,
   type FeedbackRequest,

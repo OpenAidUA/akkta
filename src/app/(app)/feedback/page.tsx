@@ -1,6 +1,6 @@
 import { MessageSquare } from 'react-feather';
 import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import FeedbackForm from './FeedbackForm';
 
 export const metadata = {

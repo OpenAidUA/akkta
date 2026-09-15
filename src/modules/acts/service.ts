@@ -1,6 +1,6 @@
 import { prisma } from '@/lib/db';
 
-import createSupabaseAdminClient from '@/shared/superbase/admin';
+import createSupabaseAdminClient from '@/shared/supabase/admin';
 import { calculateTotals, checksumBuffer } from './helpers';
 import { CreateActRequest } from './domain';
 import type { ActWithClient } from './types';

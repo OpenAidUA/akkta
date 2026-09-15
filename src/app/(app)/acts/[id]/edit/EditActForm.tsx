@@ -7,7 +7,7 @@ import {
   type FieldPath,
 } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { ArrowLeft, ArrowRight, Save } from 'react-feather';
 import Link from 'next/link';
 import { useTransition, useEffect } from 'react';
@@ -16,10 +16,10 @@ import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { updateActAction } from './action';
 
 import { type ActFormValues, STEPS } from '../../create/types';
-import FormStepper from '../../../../../components/widgets/acts/FormStepper';
-import StepMeta from '../../../../../components/widgets/acts/StepMeta';
-import StepClient from '../../../../../components/widgets/acts/StepClient';
-import StepItems from '../../../../../components/widgets/acts/StepItems';
+import FormStepper from '../../../../../modules/acts/components/FormStepper';
+import StepMeta from '../../../../../modules/acts/components/StepMeta';
+import StepClient from '../../../../../modules/acts/components/StepClient';
+import StepItems from '../../../../../modules/acts/components/StepItems';
 import { useState } from 'react';
 import type { ActWithClient } from '@/modules/acts/types';
 

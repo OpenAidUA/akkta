@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { ArrowLeft } from 'react-feather';
 import Link from 'next/link';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getActById } from '@/modules/acts/service';
 import { getOrganizationClients } from '@/modules/clients/service';
 import { prisma } from '@/lib/db';

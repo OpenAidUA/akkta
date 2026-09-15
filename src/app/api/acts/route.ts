@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { createAct } from '@/modules/acts/service';
 import { ZodError } from 'zod';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getOrganizationByUserId } from '@/modules/organizations/service';
 
 export async function POST(req: Request) {
@@ -18,7 +18,10 @@ export async function POST(req: Request) {
 
     const org = await getOrganizationByUserId(user.id);
     if (!org) {
-      return NextResponse.json({ error: 'Organization not found' }, { status: 403 });
+      return NextResponse.json(
+        { error: 'Organization not found' },
+        { status: 403 },
+      );
     }
 
     const organizationId = org.id;

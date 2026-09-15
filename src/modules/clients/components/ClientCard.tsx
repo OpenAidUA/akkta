@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import { Client } from '@prisma/client';
 import { Users, Phone, Mail, FileText, Edit2 } from 'react-feather';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 
 interface ClientCardProps {
   client: Client;

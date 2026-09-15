@@ -3,7 +3,7 @@
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
 import { ActStorage, LocalAct } from '@/modules/acts/storage';
 import { useState, useTransition } from 'react';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { Cloud, WifiOff } from 'react-feather';
 import { createActAction } from './create/action';
 import { useRouter } from 'next/navigation';

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { Plus, UserPlus, AlertCircle } from 'react-feather';
 
 interface QuickActionsProps {

@@ -1,6 +1,6 @@
 'use server';
 
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { SendCodeState, VerifyCodeState, UpdatePasswordState } from './types';
 
 import {

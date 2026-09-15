@@ -2,7 +2,7 @@ import React, { useActionState, startTransition, useEffect } from 'react';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { sendRecoveryCodeAction } from '@/app/(auth)/recovery/action';
 import {

@@ -1,6 +1,6 @@
 import { ArrowLeft } from 'react-feather';
 import Link from 'next/link';
-import ClientForm from '@/components/forms/createClient/CreateClientForm';
+import ClientForm from '@/modules/clients/components/CreateClientForm';
 
 export default function CreateClientPage() {
   return (

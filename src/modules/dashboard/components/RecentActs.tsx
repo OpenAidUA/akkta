@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/ui/button';
 import { FileText, ArrowRight } from 'react-feather';
 import type { ActWithClient } from '@/modules/acts/types';
 

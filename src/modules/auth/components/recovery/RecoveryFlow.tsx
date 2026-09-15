@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 
-import EmailStepForm from '@/shared/components/forms/auth/recovery/EmailStepForm';
-import VerificationCodeForm from '@/shared/components/forms/auth/recovery/VerificationCodeForm';
-import NewPasswordForm from '@/shared/components/forms/auth/recovery/NewPasswordForm';
+import EmailStepForm from '@/modules/auth/components/recovery/EmailStepForm';
+import VerificationCodeForm from '@/modules/auth/components/recovery/VerificationCodeForm';
+import NewPasswordForm from '@/modules/auth/components/recovery/NewPasswordForm';
 
 const STEPS = {
   email: 'email',

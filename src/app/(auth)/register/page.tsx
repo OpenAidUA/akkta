@@ -6,7 +6,7 @@ import { useForm } from 'react-hook-form';
 import { Eye, EyeOff } from 'react-feather';
 
 import { cn } from '@/lib/utils';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerAction } from './action';
 import { registerSchema, type RegisterSchema } from './schema';

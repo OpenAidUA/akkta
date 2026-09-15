@@ -3,7 +3,7 @@
 import { useActionState, startTransition } from 'react';
 import { createClientAction } from '@/app/(app)/clients/create/action';
 import { updateClientAction } from '@/app/(app)/clients/[id]/edit/action';
-import { Button, Input, Label } from '@/components/ui';
+import { Button, Input, Label } from '@/shared/ui';
 import { Save, User, FileText, Phone, Mail } from 'react-feather';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';

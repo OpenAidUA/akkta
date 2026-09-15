@@ -2,7 +2,7 @@
 
 import { FeedbackSchema } from '@/modules/feedback/domain';
 import { sendFeedbackEmail } from '@/modules/feedback/service';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 
 const MAX_SCREENSHOTS = 3;
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
