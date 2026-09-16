@@ -1,15 +1,14 @@
 import { useActionState, startTransition, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { zodResolver } from '@hookform/resolvers/zod';
 
+import { zodResolver } from '@hookform/resolvers/zod';
 import { Button, Input, Label } from '@/shared/ui';
-import { updateRecoveryPasswordAction } from '@/app/(auth)/recovery/action';
+import { updateRecoveryPasswordAction } from '@/modules/auth/actions';
 import {
   type RecoveryPasswordSchema,
   recoveryPasswordSchema,
-} from '@/app/(auth)/recovery/schema';
-
+} from '@/modules/auth/schema';
 const NewPasswordForm = () => {
   const router = useRouter();
 

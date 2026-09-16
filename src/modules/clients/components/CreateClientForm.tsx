@@ -1,8 +1,10 @@
 'use client';
 
 import { useActionState, startTransition } from 'react';
-import { createClientAction } from '@/app/(app)/clients/create/action';
-import { updateClientAction } from '@/app/(app)/clients/[id]/edit/action';
+import {
+  updateClientAction,
+  createClientAction,
+} from '@/modules/clients/actions';
 import { Button, Input, Label } from '@/shared/ui';
 import { Save, User, FileText, Phone, Mail } from 'react-feather';
 import { useForm } from 'react-hook-form';

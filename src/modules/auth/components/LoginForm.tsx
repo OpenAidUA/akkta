@@ -8,8 +8,8 @@ import { Eye, EyeOff } from 'react-feather';
 import { cn } from '@/lib/utils';
 import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { loginSchema, type LoginSchema } from '@/app/(auth)/login/schema';
-import { loginAction } from '@/app/(auth)/login/action';
+import { loginSchema, type LoginSchema } from '@/modules/auth/schema';
+import { loginAction } from '@/modules/auth/actions';
 
 const LoginForm = () => {
   const [state, action, isPending] = useActionState(loginAction, null);

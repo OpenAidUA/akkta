@@ -1,26 +1,23 @@
 'use client';
 
+import { useTransition, useState, useEffect } from 'react';
 import { useForm, type FieldErrors, type FieldPath } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Button } from '@/shared/ui/button';
 import { ArrowLeft, ArrowRight, Save, WifiOff } from 'react-feather';
 import Link from 'next/link';
-import { useTransition, useState, useEffect } from 'react';
-import { createActAction } from '../../../app/(app)/acts/create/action';
-import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
+
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/shared/ui/button';
+import { createActAction } from '@/modules/acts/actions';
+import { CreateActRequestSchema } from '@/modules/acts/domain';
 import { useNetworkStatus } from '@/shared/hooks/useNetworkStatus';
 import { ActStorage } from '@/modules/acts/storage';
-
-import {
-  type ActFormValues,
-  STEPS,
-} from '../../../app/(app)/acts/create/types';
-import FormStepper from './FormStepper';
-import StepMeta from './StepMeta';
-import StepClient from './StepClient';
-import StepItems from './StepItems';
+import { type ActFormValues, STEPS } from '@/modules/acts/types';
+import FormStepper from '@/modules/acts/components/FormStepper';
+import StepMeta from '@/modules/acts/components/StepMeta';
+import StepClient from '@/modules/acts/components/StepClient';
+import StepItems from '@/modules/acts/components/StepItems';
 
 const defaultValues: Partial<ActFormValues> = {
   act: {

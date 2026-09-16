@@ -1,7 +1,9 @@
 'use client';
 
 import { useTransition, useState } from 'react';
-
+import Link from 'next/link';
+import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import {
   Download,
   Edit2,
@@ -10,12 +12,10 @@ import {
   CheckCircle,
   AlertCircle,
 } from 'react-feather';
+
 import { Button } from '@/shared/ui/button';
-import Link from 'next/link';
-import { format } from 'date-fns';
-import { uk } from 'date-fns/locale';
 import type { ActWithClient } from '@/modules/acts/types';
-import { generatePdfAction } from './actions';
+import { generatePdfAction } from '@/modules/acts/actions';
 
 interface ActDetailViewProps {
   act: ActWithClient;

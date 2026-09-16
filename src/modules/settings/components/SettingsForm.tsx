@@ -16,7 +16,7 @@ import {
   UpdateOrganizationSchema,
   type UpdateOrganizationRequest,
 } from '@/modules/organizations/domain';
-import { updateOrganizationAction } from './action';
+import { updateOrganizationAction } from '../action';
 
 export interface SettingsFormProps {
   defaultValues: UpdateOrganizationRequest;

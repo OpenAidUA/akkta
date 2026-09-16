@@ -3,7 +3,7 @@
 import { useState, useTransition } from 'react';
 import { Trash2 } from 'react-feather';
 import { Button } from '@/shared/ui/button';
-import { deleteClientAction } from '@/app/(app)/clients/actions';
+import { deleteClientAction } from '@/modules/clients/actions';
 
 interface DeleteClientButtonProps {
   clientId: string;

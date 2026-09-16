@@ -1,26 +1,25 @@
 'use client';
 
+import { useState, useTransition, useEffect } from 'react';
+import Link from 'next/link';
+import { twMerge } from 'tailwind-merge';
+import { ArrowLeft, ArrowRight, Save } from 'react-feather';
 import {
   useForm,
   useWatch,
   type FieldErrors,
   type FieldPath,
 } from 'react-hook-form';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/shared/ui/button';
-import { ArrowLeft, ArrowRight, Save } from 'react-feather';
-import Link from 'next/link';
-import { useTransition, useEffect } from 'react';
-import { twMerge } from 'tailwind-merge';
 import { CreateActRequestSchema } from '@/modules/acts/domain';
-import { updateActAction } from './action';
-
-import { type ActFormValues, STEPS } from '../../create/types';
-import FormStepper from '../../../../../modules/acts/components/FormStepper';
-import StepMeta from '../../../../../modules/acts/components/StepMeta';
-import StepClient from '../../../../../modules/acts/components/StepClient';
-import StepItems from '../../../../../modules/acts/components/StepItems';
-import { useState } from 'react';
+import { updateActAction } from '@/modules/acts/actions';
+import { type ActFormValues, STEPS } from '@/modules/acts/types';
+import FormStepper from '@/modules/acts/components/FormStepper';
+import StepMeta from '@/modules/acts/components/StepMeta';
+import StepClient from '@/modules/acts/components/StepClient';
+import StepItems from '@/modules/acts/components/StepItems';
 import type { ActWithClient } from '@/modules/acts/types';
 
 export interface EditActFormProps {

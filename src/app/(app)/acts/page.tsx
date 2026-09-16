@@ -1,12 +1,13 @@
-import { Button } from '@/shared/ui/button';
 import Link from 'next/link';
+import { format } from 'date-fns';
+import { uk } from 'date-fns/locale';
 import { FilePlus, Plus, FileText } from 'react-feather';
+
+import { Button } from '@/shared/ui/button';
 import EmptyPagePlaceholder from '@/shared/components/EmptyPage';
 import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getUserActs } from '@/modules/acts/service';
-import { format } from 'date-fns';
-import { uk } from 'date-fns/locale';
-import OfflineSyncBanner from './OfflineSyncBanner';
+import OfflineSyncBanner from '@/modules/acts/components/OfflineSyncBanner';
 import { DownloadButton } from '@/modules/acts/components/DownloadButton';
 import { parsePage } from '@/lib/pagination';
 import { PaginationControls } from '@/shared/components/PaginationControls';

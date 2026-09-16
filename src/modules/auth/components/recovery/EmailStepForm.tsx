@@ -4,11 +4,11 @@ import { useForm } from 'react-hook-form';
 
 import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { sendRecoveryCodeAction } from '@/app/(auth)/recovery/action';
+import { sendRecoveryCodeAction } from '@/modules/auth/actions';
 import {
   type RecoveryEmailSchema,
   recoveryEmailSchema,
-} from '@/app/(auth)/recovery/schema';
+} from '@/modules/auth/schema';
 
 type EmailStepFormProps = {
   setEmail: React.Dispatch<React.SetStateAction<string>>;

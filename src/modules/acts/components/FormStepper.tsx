@@ -1,5 +1,6 @@
 import { twMerge } from 'tailwind-merge';
-import { STEPS } from '../../../app/(app)/acts/create/types';
+
+import { STEPS } from '@/modules/acts/types';
 
 interface FormStepperProps {
   currentStep: number;

@@ -5,7 +5,7 @@ import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getActById } from '@/modules/acts/service';
 import { getOrganizationClients } from '@/modules/clients/service';
 import { prisma } from '@/lib/db';
-import EditActForm from './EditActForm';
+import EditActForm from '@/modules/acts/components/EditActForm';
 
 interface EditActPageProps {
   params: Promise<{ id: string }>;

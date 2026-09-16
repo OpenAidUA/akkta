@@ -5,7 +5,7 @@ import { ActStorage, LocalAct } from '@/modules/acts/storage';
 import { useState, useTransition } from 'react';
 import { Button } from '@/shared/ui/button';
 import { Cloud, WifiOff } from 'react-feather';
-import { createActAction } from './create/action';
+import { createActAction } from '../actions';
 import { useRouter } from 'next/navigation';
 
 export default function OfflineSyncBanner() {

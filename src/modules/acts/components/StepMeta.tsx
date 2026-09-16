@@ -1,5 +1,5 @@
 import { Input, Label } from '@/shared/ui';
-import type { StepProps } from '../../../app/(app)/acts/create/types';
+import type { StepProps } from '@/modules/acts/types';
 
 export default function StepMeta({ register, errors }: StepProps) {
   return (

@@ -16,7 +16,7 @@ import {
   FeedbackSchema,
   type FeedbackRequest,
 } from '@/modules/feedback/domain';
-import { submitFeedbackAction } from './action';
+import { submitFeedbackAction } from '../action';
 
 const MAX_SCREENSHOTS = 3;
 const MAX_FILE_SIZE = 2 * 1024 * 1024;

@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 
 import { Button, Input, Label } from '@/shared/ui';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { verifyRecoveryCodeAction } from '@/app/(auth)/recovery/action';
+import { verifyRecoveryCodeAction } from '@/modules/auth/actions';
 import {
   type RecoveryTokenFormSchema,
   recoveryTokenFormSchema,
-} from '@/app/(auth)/recovery/schema';
+} from '@/modules/auth/schema';
 
 type VerificationCodeFormProps = {
   email: string;

@@ -8,7 +8,7 @@ import {
   SelectContent,
   SelectItem,
 } from '@/shared/ui';
-import type { StepProps } from '../../../app/(app)/acts/create/types';
+import type { StepProps } from '@/modules/acts/types';
 
 export interface StepClientProps extends StepProps {
   clients: Array<{
