@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import LoginForm from '@/shared/components/forms/auth/LoginForm';
+import LoginForm from '@/modules/auth/components/LoginForm';
 
 export default function LoginPage() {
   return (

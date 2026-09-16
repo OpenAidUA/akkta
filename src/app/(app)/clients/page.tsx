@@ -1,10 +1,10 @@
 import { getPaginatedOrganizationClients } from '@/modules/clients/service';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { prisma } from '@/lib/db';
-import { ClientsToolbar } from '@/components/widgets/clients/ClientsToolbar';
-import ClientsList from '@/components/widgets/clients/ClientsList';
-import { ClientsEmptyState } from '@/components/widgets/clients/ClientsEmptyState';
-import { ClientsPageHeader } from '@/components/widgets/clients/ClientsPageHeader';
+import { ClientsToolbar } from '@/modules/clients/components/ClientsToolbar';
+import ClientsList from '@/modules/clients/components/ClientsList';
+import { ClientsEmptyState } from '@/modules/clients/components/ClientsEmptyState';
+import { ClientsPageHeader } from '@/modules/clients/components/ClientsPageHeader';
 import { parsePage } from '@/lib/pagination';
 import { PaginationControls } from '@/shared/components/PaginationControls';
 

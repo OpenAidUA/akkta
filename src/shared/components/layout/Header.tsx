@@ -1,10 +1,9 @@
 'use client';
 
-import Image from 'next/image';
 import { Menu } from 'react-feather';
 
 import { useSidebar } from '@/shared/providers/SidebarProvider';
-import { ProfileDropdown } from '@/components/widgets/profile/ProfileDropdown';
+import { ProfileDropdown } from '@/modules/profile/components/ProfileDropdown';
 
 export default function Header() {
   const { open: openSidebar } = useSidebar();

@@ -1,7 +1,7 @@
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getActById } from '@/modules/acts/service';
 import { redirect } from 'next/navigation';
-import ActDetailView from './ActDetailView';
+import ActDetailView from '@/modules/acts/components/ActDetailView';
 
 export const dynamic = 'force-dynamic';
 

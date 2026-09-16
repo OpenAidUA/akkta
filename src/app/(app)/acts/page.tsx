@@ -1,13 +1,14 @@
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
-import { FilePlus, Plus, FileText } from 'react-feather';
-import EmptyPagePlaceholder from '@/shared/components/EmptyPage';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
-import { getUserActs } from '@/modules/acts/service';
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale';
-import OfflineSyncBanner from './OfflineSyncBanner';
-import { DownloadButton } from '@/components/widgets/acts/DownloadButton';
+import { FilePlus, Plus, FileText } from 'react-feather';
+
+import { Button } from '@/shared/ui/button';
+import EmptyPagePlaceholder from '@/shared/components/EmptyPage';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
+import { getUserActs } from '@/modules/acts/service';
+import OfflineSyncBanner from '@/modules/acts/components/OfflineSyncBanner';
+import { DownloadButton } from '@/modules/acts/components/DownloadButton';
 import { parsePage } from '@/lib/pagination';
 import { PaginationControls } from '@/shared/components/PaginationControls';
 
@@ -64,84 +65,86 @@ export default async function Acts({ searchParams }: ActsPageProps) {
         <>
           <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-x-auto">
             <table className="w-full text-left text-sm text-slate-600">
-            <thead className="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
-              <tr>
-                <th className="px-6 py-4 whitespace-nowrap">Номер / Дата</th>
-                <th className="px-6 py-4 whitespace-nowrap">Клієнт</th>
-                <th className="px-6 py-4 whitespace-nowrap">Сума</th>
-                <th className="px-6 py-4 whitespace-nowrap">Статус</th>
-                <th className="px-6 py-4 text-right whitespace-nowrap">Дії</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100">
-              {acts.items.map((act) => {
-                const actData = act.data;
-                const actNumber = actData?.meta?.number || '—';
-                const dateStr = actData?.meta?.date
-                  ? format(new Date(actData.meta.date), 'd MMM yyyy', {
-                      locale: uk,
-                    })
-                  : '—';
-                const clientName =
-                  act.clientSnapshot?.name || act.client?.name || 'Без назви';
+              <thead className="bg-slate-50 border-b border-slate-200 text-xs uppercase font-semibold text-slate-500">
+                <tr>
+                  <th className="px-6 py-4 whitespace-nowrap">Номер / Дата</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Клієнт</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Сума</th>
+                  <th className="px-6 py-4 whitespace-nowrap">Статус</th>
+                  <th className="px-6 py-4 text-right whitespace-nowrap">
+                    Дії
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {acts.items.map((act) => {
+                  const actData = act.data;
+                  const actNumber = actData?.meta?.number || '—';
+                  const dateStr = actData?.meta?.date
+                    ? format(new Date(actData.meta.date), 'd MMM yyyy', {
+                        locale: uk,
+                      })
+                    : '—';
+                  const clientName =
+                    act.clientSnapshot?.name || act.client?.name || 'Без назви';
 
-                return (
-                  <tr
-                    key={act.id}
-                    className="hover:bg-slate-50 transition-colors"
-                  >
-                    <td className="px-6 py-4">
-                      <div className="flex flex-col">
-                        <span className="font-medium text-slate-900 whitespace-nowrap">
-                          № {actNumber}
-                        </span>
-                        <span className="text-xs text-slate-400 whitespace-nowrap">
-                          {dateStr}
-                        </span>
-                      </div>
-                    </td>
-                    <td className="px-6 py-4 font-medium text-slate-700 whitespace-nowrap">
-                      {clientName}
-                    </td>
-                    <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">
-                      {typeof actData?.totals?.total === 'number'
-                        ? new Intl.NumberFormat('uk-UA', {
-                            style: 'currency',
-                            currency: 'UAH',
-                          }).format(actData.totals.total)
-                        : '—'}
-                    </td>
-                    <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
+                  return (
+                    <tr
+                      key={act.id}
+                      className="hover:bg-slate-50 transition-colors"
+                    >
+                      <td className="px-6 py-4">
+                        <div className="flex flex-col">
+                          <span className="font-medium text-slate-900 whitespace-nowrap">
+                            № {actNumber}
+                          </span>
+                          <span className="text-xs text-slate-400 whitespace-nowrap">
+                            {dateStr}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-slate-700 whitespace-nowrap">
+                        {clientName}
+                      </td>
+                      <td className="px-6 py-4 font-medium text-slate-900 whitespace-nowrap">
+                        {typeof actData?.totals?.total === 'number'
+                          ? new Intl.NumberFormat('uk-UA', {
+                              style: 'currency',
+                              currency: 'UAH',
+                            }).format(actData.totals.total)
+                          : '—'}
+                      </td>
+                      <td className="px-6 py-4">
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium whitespace-nowrap
                           ${act.status === 'ready' ? 'bg-green-100 text-green-800' : ''}
                           ${act.status === 'draft' ? 'bg-gray-100 text-gray-800' : ''}
                           ${act.status === 'generating' ? 'bg-yellow-100 text-yellow-800' : ''}
                           ${act.status === 'failed' ? 'bg-red-100 text-red-800' : ''}`}
-                      >
-                        {act.status === 'draft' && 'Чернетка'}
-                        {act.status === 'generating' && 'Генерація...'}
-                        {act.status === 'ready' && 'Готовий'}
-                        {act.status === 'failed' && 'Помилка'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2">
-                        <Link
-                          className="h-8 w-8 p-2 rounded-md text-slate-400 hover:bg-blue-600/20"
-                          href={`/acts/${act.id}`}
                         >
-                          <FileText size={16} />
-                        </Link>
-                        {act.status === 'ready' && (
-                          <DownloadButton actId={act.id} />
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
+                          {act.status === 'draft' && 'Чернетка'}
+                          {act.status === 'generating' && 'Генерація...'}
+                          {act.status === 'ready' && 'Готовий'}
+                          {act.status === 'failed' && 'Помилка'}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-right">
+                        <div className="flex items-center justify-end gap-2">
+                          <Link
+                            className="h-8 w-8 p-2 rounded-md text-slate-400 hover:bg-blue-600/20"
+                            href={`/acts/${act.id}`}
+                          >
+                            <FileText size={16} />
+                          </Link>
+                          {act.status === 'ready' && (
+                            <DownloadButton actId={act.id} />
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
             </table>
           </div>
           <PaginationControls

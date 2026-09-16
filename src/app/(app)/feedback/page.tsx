@@ -1,7 +1,7 @@
 import { MessageSquare } from 'react-feather';
 import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
-import FeedbackForm from './FeedbackForm';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
+import FeedbackForm from '../../../modules/feedback/components/FeedbackForm';
 
 export const metadata = {
   title: 'Зворотний зв’язок',

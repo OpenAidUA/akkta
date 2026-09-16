@@ -1,10 +1,10 @@
 import { Home } from 'react-feather';
-import { createSupabaseServerClient } from '@/shared/superbase/server';
+import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { getDashboardStats, getRecentActs } from '@/modules/dashboard/service';
 import { getOrganizationByUserId } from '@/modules/organizations/service';
-import { StatCards } from '@/components/widgets/dashboard/StatCards';
-import { RecentActs } from '@/components/widgets/dashboard/RecentActs';
-import { QuickActions } from '@/components/widgets/dashboard/QuickActions';
+import { StatCards } from '@/modules/dashboard/components/StatCards';
+import { RecentActs } from '@/modules/dashboard/components/RecentActs';
+import { QuickActions } from '@/modules/dashboard/components/QuickActions';
 
 export default async function DashboardPage() {
   const supabase = await createSupabaseServerClient();
