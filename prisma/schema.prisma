@@ -13,6 +13,16 @@ enum ActStatus {
     failed
 }
 
+enum ProjectStatus {
+    active
+    archived
+}
+
+enum EstimateStatus {
+    draft
+    agreed
+}
+
 enum OrganizationRole {
     OWNER
     MEMBER
@@ -38,9 +48,10 @@ model Organization {
     avatarUrl      String?
     createdAt      DateTime @default(now())
 
-    members OrganizationMember[]
-    clients Client[]
-    acts    Act[]
+    members  OrganizationMember[]
+    clients  Client[]
+    acts     Act[]
+    projects Project[]
 }
 
 model OrganizationMember {
@@ -72,9 +83,80 @@ model Client {
 
     createdAt DateTime @default(now())
 
-    acts Act[]
+    acts              Act[]
+    primaryOnProjects Project[] @relation("ProjectPrimaryClient")
 
     @@index([organizationId])
+}
+
+model Project {
+    id String @id @default(uuid())
+
+    organizationId String
+    organization   Organization @relation(fields: [organizationId], references: [id])
+
+    primaryClientId String?
+    primaryClient   Client? @relation("ProjectPrimaryClient", fields: [primaryClientId], references: [id])
+
+    name        String
+    address     String?
+    description String?
+    status      ProjectStatus @default(active)
+
+    plannedStartDate DateTime?
+    plannedEndDate   DateTime?
+
+    createdAt DateTime @default(now())
+
+    acts     Act[]
+    estimate Estimate?
+
+    @@index([organizationId])
+    @@index([primaryClientId])
+}
+
+model Estimate {
+    id String @id @default(uuid())
+
+    projectId String  @unique
+    project   Project @relation(fields: [projectId], references: [id])
+
+    createdAt DateTime @default(now())
+
+    revisions EstimateRevision[]
+}
+
+model EstimateRevision {
+    id String @id @default(uuid())
+
+    estimateId String
+    estimate   Estimate @relation(fields: [estimateId], references: [id])
+
+    version Int
+    status  EstimateStatus @default(draft)
+
+    createdAt DateTime @default(now())
+
+    items EstimateItem[]
+
+    @@unique([estimateId, version])
+    @@index([estimateId])
+}
+
+model EstimateItem {
+    id String @id @default(uuid())
+
+    revisionId String
+    revision   EstimateRevision @relation(fields: [revisionId], references: [id])
+
+    name     String
+    unit     String
+    quantity Decimal @db.Decimal(14, 3)
+    price    Decimal @db.Decimal(14, 2)
+    amount   Decimal @db.Decimal(14, 2)
+    order    Int     @default(0)
+
+    @@index([revisionId])
 }
 
 model Act {
@@ -88,6 +170,9 @@ model Act {
 
     clientId String?
     client   Client? @relation(fields: [clientId], references: [id])
+
+    projectId String?
+    project   Project? @relation(fields: [projectId], references: [id])
 
     clientSnapshot Json
 
@@ -104,6 +189,7 @@ model Act {
     @@index([organizationId])
     @@index([userId])
     @@index([clientId])
+    @@index([projectId])
 }
 
 model ActPdf {
