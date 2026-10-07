@@ -29,6 +29,7 @@ const defaultValues: Partial<ActFormValues> = {
     items: [
       {
         title: 'Послуги з розробки програмного забезпечення',
+        unit: 'послуга',
         quantity: 1,
         unitPrice: 0,
       },
@@ -47,6 +48,7 @@ const defaultValues: Partial<ActFormValues> = {
       email: '',
     },
   },
+  projectId: null,
 };
 
 export interface CreateActFormProps {
@@ -61,11 +63,29 @@ export interface CreateActFormProps {
     name: string;
     representative: string;
   };
+  /** Pre-fills the act's project association, e.g. when created from a project page. */
+  project?: {
+    id: string;
+    name: string;
+  };
+  /**
+   * Pre-fills act items, e.g. when creating an act from an agreed estimate
+   * revision. Items are copied as a plain snapshot at submit time — the act
+   * never depends on later estimate changes.
+   */
+  initialItems?: Array<{
+    title: string;
+    unit: string;
+    quantity: number;
+    unitPrice: number;
+  }>;
 }
 
 export default function CreateActForm({
   clients,
   contractor,
+  project,
+  initialItems,
 }: CreateActFormProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -75,6 +95,10 @@ export default function CreateActForm({
     ...defaultValues,
     act: {
       ...defaultValues.act!,
+      items:
+        initialItems && initialItems.length > 0
+          ? initialItems
+          : defaultValues.act!.items,
       parties: {
         contractor: {
           name: contractor.name,
@@ -83,6 +107,7 @@ export default function CreateActForm({
         client: { name: '' },
       },
     },
+    projectId: project?.id ?? null,
   };
 
   const {
@@ -162,6 +187,12 @@ export default function CreateActForm({
         <h1 className="text-2xl font-bold text-slate-900 mb-6 text-center">
           Новий акт
         </h1>
+        {project && (
+          <p className="text-center text-sm text-slate-500 mb-4">
+            Проєкт:{' '}
+            <span className="font-medium text-slate-700">{project.name}</span>
+          </p>
+        )}
         <FormStepper currentStep={currentStep} />
       </div>
 
