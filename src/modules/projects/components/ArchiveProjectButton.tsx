@@ -46,11 +46,13 @@ export function ArchiveProjectButton({
         disabled={isPending}
       >
         {isArchived ? <RotateCcw size={14} /> : <Archive size={14} />}
-        {isPending
-          ? '...'
-          : isArchived
-            ? 'Відновити проєкт'
-            : 'Архівувати проєкт'}
+        <span className="hidden md:inline">
+          {isPending
+            ? '...'
+            : isArchived
+              ? 'Відновити проєкт'
+              : 'Архівувати проєкт'}
+        </span>
       </Button>
     </div>
   );

@@ -2,6 +2,7 @@ import { prisma } from '@/lib/db';
 import { Prisma } from '@prisma/client';
 import {
   CreateProjectRequest,
+  CreateProjectWithClientRequest,
   EstimateRevisionInput,
   UpdateProjectRequest,
 } from './domain';
@@ -210,6 +211,64 @@ export async function createProject(
   });
 }
 
+/**
+ * Creates a project together with its primary client in a single
+ * transaction — either an existing client (by id) or a brand new one
+ * created from a snapshot, optionally saved to the organization's client
+ * list. Mirrors the equivalent "client step" logic in acts/service.ts
+ * createAct, so the two creation flows behave consistently.
+ *
+ * The client step is entirely optional: passing `client: null` creates a
+ * project with no primary client, same as omitting primaryClientId in the
+ * legacy createProject flow.
+ */
+export async function createProjectWithClient(
+  organizationId: string,
+  data: CreateProjectWithClientRequest,
+) {
+  return prisma.$transaction(async (tx) => {
+    let primaryClientId: string | null = null;
+
+    if (data.client) {
+      if (data.client.id) {
+        const existing = await tx.client.findFirst({
+          where: { id: data.client.id, organizationId },
+          select: { id: true },
+        });
+        if (!existing) {
+          throw new Error('Client not found');
+        }
+        primaryClientId = existing.id;
+      } else if (data.client.save) {
+        const created = await tx.client.create({
+          data: {
+            ...data.client.snapshot,
+            organizationId,
+          },
+        });
+        primaryClientId = created.id;
+      }
+      // If neither an id nor save=true was provided, the client snapshot is
+      // only used for display purposes during the wizard and is discarded —
+      // the project is created without a primary client link.
+    }
+
+    return tx.project.create({
+      data: {
+        organizationId,
+        name: data.project.name,
+        address: data.project.address,
+        description: data.project.description,
+        plannedStartDate:
+          parsePlannedDate(data.project.plannedStartDate) || undefined,
+        plannedEndDate:
+          parsePlannedDate(data.project.plannedEndDate) || undefined,
+        primaryClientId,
+      },
+    });
+  });
+}
+
 export async function updateProject(
   projectId: string,
   organizationId: string,
@@ -335,9 +394,55 @@ export async function getProjectEstimate(
     include: {
       revisions: {
         orderBy: { version: 'desc' },
-        include: { items: { orderBy: { order: 'asc' } } },
+        include: {
+          items: { orderBy: [{ category: 'asc' }, { order: 'asc' }] },
+        },
       },
     },
+  });
+}
+
+/**
+ * Permanently deletes the estimate for a project, including all of its
+ * revisions (draft and agreed) and their items. This does not affect acts
+ * that were previously created "from the estimate" — acts store their own
+ * snapshot of items (ActDocument JSON) and have no live reference back to
+ * the estimate, so they remain intact and unaffected.
+ *
+ * There is no FK cascade configured on these relations (Restrict is the
+ * Prisma default), so children must be deleted before parents inside a
+ * single transaction to avoid partial deletes / orphaned rows.
+ */
+export async function deleteProjectEstimate(
+  projectId: string,
+  organizationId: string,
+) {
+  const project = await prisma.project.findFirst({
+    where: { id: projectId, organizationId },
+    select: { id: true },
+  });
+  if (!project) {
+    throw new Error('Project not found');
+  }
+
+  const estimate = await prisma.estimate.findUnique({
+    where: { projectId },
+    select: { id: true },
+  });
+  if (!estimate) {
+    // Nothing to delete — treat as a no-op success rather than an error so
+    // callers don't need to special-case "already gone" races.
+    return null;
+  }
+
+  return prisma.$transaction(async (tx) => {
+    await tx.estimateItem.deleteMany({
+      where: { revision: { estimateId: estimate.id } },
+    });
+    await tx.estimateRevision.deleteMany({
+      where: { estimateId: estimate.id },
+    });
+    return tx.estimate.delete({ where: { id: estimate.id } });
   });
 }
 
@@ -362,7 +467,9 @@ export async function getCurrentEstimateRevision(
   return prisma.estimateRevision.findFirst({
     where: { estimateId: estimate.id },
     orderBy: { version: 'desc' },
-    include: { items: { orderBy: { order: 'asc' } } },
+    include: {
+      items: { orderBy: [{ category: 'asc' }, { order: 'asc' }] },
+    },
   });
 }
 
@@ -404,7 +511,8 @@ async function runSerializableWithRetry<T>(
       const isSerializationFailure =
         error instanceof Prisma.PrismaClientKnownRequestError &&
         error.code === 'P2034';
-      const isConflict = isSerializationFailure || isUniqueConstraintError(error);
+      const isConflict =
+        isSerializationFailure || isUniqueConstraintError(error);
 
       if (!isConflict || attempt === attempts) {
         if (isConflict) {
@@ -426,11 +534,15 @@ function calculateItemAmounts(items: EstimateRevisionInput['items']) {
   return items.map((item, index) => {
     const amount = Math.round(item.quantity * item.price * 100) / 100;
     return {
+      category: item.category,
       name: item.name,
       unit: item.unit,
       quantity: item.quantity,
       price: item.price,
       amount,
+      source: item.source || null,
+      sourceDate: item.sourceDate ? new Date(item.sourceDate) : null,
+      note: item.note || null,
       order: index,
     };
   });
@@ -462,7 +574,9 @@ export async function createInitialEstimateRevision(
     // estimate and both trying to create one (unique on Estimate.projectId).
     const existing = await tx.estimate.findUnique({ where: { projectId } });
     if (existing) {
-      throw new EstimateConflictError('Кошторис вже створено, оновіть сторінку');
+      throw new EstimateConflictError(
+        'Кошторис вже створено, оновіть сторінку',
+      );
     }
 
     return tx.estimate.create({
@@ -579,7 +693,7 @@ export async function agreeEstimateRevision(
 
     if (latest && latest.version !== revision.version) {
       throw new EstimateConflictError(
-        'З\'явилась новіша версія кошторису, оновіть сторінку',
+        "З'явилась новіша версія кошторису, оновіть сторінку",
       );
     }
 

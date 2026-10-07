@@ -7,14 +7,19 @@ import {
   createInitialEstimateRevision,
   createNextEstimateRevision,
   createProject,
+  createProjectWithClient,
   deleteProject,
+  deleteProjectEstimate,
   EstimateConflictError,
   unarchiveProject,
   updateProject,
 } from '@/modules/projects/service';
 import {
+  CreateProjectWithClientSchema,
   EstimateRevisionInputSchema,
   ProjectSchema,
+  type CreateProjectWithClientRequest,
+  type EstimateCategory,
 } from '@/modules/projects/domain';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
@@ -84,6 +89,53 @@ export async function createProjectAction(
   } catch (e) {
     console.error(e);
     return { message: 'Failed to create project' };
+  }
+
+  redirect(`/projects/${projectId}`);
+}
+
+export type CreateProjectWithClientState = {
+  errors?: Record<string, string[]>;
+  message?: string;
+} | null;
+
+/**
+ * Creates a project together with its client in one step, submitted at the
+ * end of the two-step creation wizard (project details -> client). Unlike
+ * createProjectAction, this accepts a plain validated object directly from
+ * the client component (not FormData), matching the pattern used by
+ * createActAction for the equivalent act creation flow.
+ */
+export async function createProjectWithClientAction(
+  data: CreateProjectWithClientRequest,
+): Promise<CreateProjectWithClientState> {
+  const auth = await requireOrganizationMembership();
+  if ('error' in auth) {
+    return { message: auth.error };
+  }
+
+  const validated = CreateProjectWithClientSchema.safeParse(data);
+
+  if (!validated.success) {
+    return {
+      errors: validated.error.flatten().fieldErrors,
+      message: 'Validation failed',
+    };
+  }
+
+  let projectId: string;
+  try {
+    const project = await createProjectWithClient(
+      auth.organizationId,
+      validated.data,
+    );
+    projectId = project.id;
+  } catch (e) {
+    console.error(e);
+    return {
+      message:
+        e instanceof Error ? e.message : 'Не вдалось створити проєкт',
+    };
   }
 
   redirect(`/projects/${projectId}`);
@@ -189,12 +241,25 @@ export type EstimateActionState = {
 } | null;
 
 function parseEstimateItemsFromFormData(formData: FormData) {
+  const categories = formData.getAll('itemCategory').map(String);
   const names = formData.getAll('itemName').map(String);
   const units = formData.getAll('itemUnit').map(String);
   const quantities = formData.getAll('itemQuantity').map(Number);
   const prices = formData.getAll('itemPrice').map(Number);
+  const sources = formData.getAll('itemSource').map(String);
+  const sourceDates = formData.getAll('itemSourceDate').map(String);
+  const notes = formData.getAll('itemNote').map(String);
 
-  const lengths = [names.length, units.length, quantities.length, prices.length];
+  const lengths = [
+    categories.length,
+    names.length,
+    units.length,
+    quantities.length,
+    prices.length,
+    sources.length,
+    sourceDates.length,
+    notes.length,
+  ];
   if (lengths.some((len) => len !== lengths[0])) {
     // Malformed/tampered submission: the parallel arrays must all describe
     // the same set of rows. Fail closed rather than silently zipping
@@ -204,10 +269,14 @@ function parseEstimateItemsFromFormData(formData: FormData) {
   }
 
   return names.map((name, index) => ({
+    category: categories[index] as EstimateCategory,
     name,
     unit: units[index] ?? '',
     quantity: quantities[index],
     price: prices[index],
+    source: sources[index] || undefined,
+    sourceDate: sourceDates[index] || undefined,
+    note: notes[index] || undefined,
   }));
 }
 
@@ -306,6 +375,23 @@ export async function agreeEstimateRevisionAction(
     }
     console.error(e);
     return { error: 'Не вдалось погодити кошторис' };
+  }
+
+  revalidatePath(`/projects/${projectId}`);
+  return { success: true };
+}
+
+export async function deleteProjectEstimateAction(projectId: string) {
+  const auth = await requireOrganizationMembership();
+  if ('error' in auth) {
+    return { error: auth.error };
+  }
+
+  try {
+    await deleteProjectEstimate(projectId, auth.organizationId);
+  } catch (e) {
+    console.error(e);
+    return { error: 'Не вдалось видалити кошторис' };
   }
 
   revalidatePath(`/projects/${projectId}`);

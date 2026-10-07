@@ -88,17 +88,21 @@ export default async function ProjectDetailPage({
         version: currentRevision.version,
         status: currentRevision.status,
         items: currentRevision.items.map((item) => ({
+          category: item.category,
           name: item.name,
           unit: item.unit,
           quantity: Number(item.quantity),
           price: Number(item.price),
           amount: Number(item.amount),
+          source: item.source,
+          sourceDate: item.sourceDate ? item.sourceDate.toISOString() : null,
+          note: item.note,
         })),
       }
     : null;
 
   return (
-    <div className="max-w-4xl mx-auto pb-20 pt-10 px-4">
+    <div className="">
       <div className="mb-6">
         <Link
           href="/projects"
@@ -132,7 +136,7 @@ export default async function ProjectDetailPage({
             <Link href={`/projects/${project.id}/edit`}>
               <Button variant="outline" size="sm" className="gap-1.5">
                 <Edit2 size={14} />
-                Редагувати
+                <span className="hidden md:inline">Редагувати</span>
               </Button>
             </Link>
             <ArchiveProjectButton

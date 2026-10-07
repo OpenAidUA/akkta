@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { Trash2 } from 'react-feather';
 import { Button } from '@/shared/ui/button';
 import { deleteProjectAction } from '@/modules/projects/actions';
@@ -14,6 +15,7 @@ export function DeleteProjectButton({
   projectId,
   projectName,
 }: DeleteProjectButtonProps) {
+  const router = useRouter();
   const [showConfirm, setShowConfirm] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -25,6 +27,11 @@ export function DeleteProjectButton({
       if (result?.error) {
         setError(result.error);
         setShowConfirm(false);
+      } else {
+        // The project page would 404 on refresh once the project is gone,
+        // so navigate the user back to the list right after a successful
+        // delete instead of leaving them on a now-dead detail page.
+        router.push('/projects');
       }
     });
   };
@@ -64,7 +71,7 @@ export function DeleteProjectButton({
       title={`Видалити ${projectName}`}
     >
       <Trash2 size={14} />
-      Видалити
+      <span className="hidden md:inline">Видалити</span>
     </Button>
   );
 }

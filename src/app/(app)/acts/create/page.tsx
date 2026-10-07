@@ -69,12 +69,17 @@ export default async function CreateActPage({
           membership.organizationId,
         );
         if (revision) {
-          initialItems = revision.items.map((item) => ({
-            title: item.name,
-            unit: item.unit,
-            quantity: Number(item.quantity),
-            unitPrice: Number(item.price),
-          }));
+          // Acts document completed "роботи" only — materials, machinery,
+          // delivery and taxes from the estimate are internal cost planning
+          // and are not transferred into the act.
+          initialItems = revision.items
+            .filter((item) => item.category === 'WORK')
+            .map((item) => ({
+              title: item.name,
+              unit: item.unit,
+              quantity: Number(item.quantity),
+              unitPrice: Number(item.price),
+            }));
         }
       }
     }
