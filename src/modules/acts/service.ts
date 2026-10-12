@@ -44,11 +44,23 @@ export async function createAct(
       clientId = client.id;
     }
 
+    const projectId: string | null = payload.projectId ?? null;
+    if (projectId) {
+      const project = await tx.project.findFirst({
+        where: { id: projectId, organizationId },
+        select: { id: true },
+      });
+      if (!project) {
+        throw new Error('Project not found');
+      }
+    }
+
     const act = await tx.act.create({
       data: {
         userId,
         organizationId,
         clientId,
+        projectId,
         clientSnapshot,
         data: validatedAct,
         templateVersion: 'v1',

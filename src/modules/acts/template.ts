@@ -56,11 +56,15 @@ export function renderActHtml(data: ActTemplateData): string {
   const itemsHtml = items
     .map((item, i) => {
       const itemTotal = item.total ?? item.quantity * item.unitPrice;
+      // Historical acts created before the `unit` field existed have no
+      // value here — fall back to the legacy "послуга" label so previously
+      // generated PDFs remain reproducible byte-for-byte in content.
+      const unit = escapeHtml(item.unit || 'послуга');
       return `
         <tr>
           <td class="num">${i + 1}</td>
           <td class="desc">${escapeHtml(item.title)}${item.description ? `<br/><span class="item-desc">${escapeHtml(item.description)}</span>` : ''}</td>
-          <td class="unit">послуга</td>
+          <td class="unit">${unit}</td>
           <td class="qty">${formatMoney(item.quantity)}</td>
           <td class="price">${formatMoney(item.unitPrice)}</td>
           <td class="total">${formatMoney(itemTotal)}</td>

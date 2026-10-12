@@ -1,6 +1,6 @@
 'use client';
 
-import { Home, FileText, User, X, LogOut } from 'react-feather';
+import { Home, FileText, User, X, LogOut, Folder } from 'react-feather';
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 
 const nav = [
   { name: 'Дашборд', href: '/', icon: <Home size={24} /> },
+  { name: 'Проєкти', href: '/projects', icon: <Folder size={24} /> },
   { name: 'Акти', href: '/acts', icon: <FileText size={24} /> },
   { name: 'Клієнти', href: '/clients', icon: <User size={24} /> },
 ];

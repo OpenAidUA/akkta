@@ -33,6 +33,17 @@ export default function StepItems({ register, errors, control }: StepProps) {
               )}
             </div>
             <div className="flex gap-4 items-center">
+              <div className="w-24">
+                <Label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+                  Одиниця
+                </Label>
+                <Input
+                  type="text"
+                  className="h-9 text-sm"
+                  placeholder="послуга"
+                  {...register(`act.items.${index}.unit` as const)}
+                />
+              </div>
               <div className="flex-1">
                 <Label className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
                   Кількість <span className="text-red-400">*</span>
@@ -106,7 +117,9 @@ export default function StepItems({ register, errors, control }: StepProps) {
       <Button
         type="button"
         variant="outline"
-        onClick={() => append({ title: '', quantity: 1, unitPrice: 0 })}
+        onClick={() =>
+          append({ title: '', unit: 'послуга', quantity: 1, unitPrice: 0 })
+        }
         className="w-full border-dashed"
       >
         <Plus size={16} className="mr-2" /> Додати позицію
