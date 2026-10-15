@@ -28,18 +28,20 @@ function getInitials(name: string): string {
 }
 
 export const ProfileDropdown = () => {
-  const { userName, orgName, signOut } = useAuth();
+  const context = useAuth();
 
-  const initials = getInitials(userName || 'U');
+  const initials = getInitials(context.userName || 'U');
 
   return (
     <div className="flex items-center gap-3 relative">
       <div className="hidden sm:block text-right">
         <p className="text-sm font-medium text-slate-900 leading-tight">
-          {userName || 'User'}
+          {context.userName || 'User'}
         </p>
-        {orgName && (
-          <p className="text-xs text-slate-400 leading-tight">{orgName}</p>
+        {context.orgName && (
+          <p className="text-xs text-slate-400 leading-tight">
+            {context.orgName}
+          </p>
         )}
       </div>
 
@@ -85,7 +87,7 @@ export const ProfileDropdown = () => {
                 <button
                   type="button"
                   className="text-sm flex gap-2 p-2 cursor-pointer text-slate-600"
-                  onClick={signOut}
+                  onClick={context.signOut}
                 >
                   <LogOut size={22} />
                   Вийти
