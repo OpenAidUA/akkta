@@ -113,7 +113,7 @@ export default function ActDetailView({ act }: ActDetailViewProps) {
       <div className="md:flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-slate-900">
+            <h1 className="font-bold text-2xl text-slate-900">
               Акт № {meta.number || '—'}
             </h1>
             <p className="text-sm text-slate-500">{dateStr}</p>
