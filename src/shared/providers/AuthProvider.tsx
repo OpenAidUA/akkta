@@ -17,9 +17,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({
   children,
   user: initialUser,
+  initialOrgName = '',
 }: {
   children: React.ReactNode;
   user: User | null;
+  initialOrgName?: string;
 }) {
   const [user, setUser] = useState<User | null>(initialUser);
   const router = useRouter();
@@ -60,11 +62,11 @@ export function AuthProvider({
 
   const userName =
     (user?.user_metadata?.full_name as string | undefined) ?? user?.email ?? '';
-  const orgName =
-    (user?.user_metadata?.organization_name as string | undefined) ?? '';
 
   return (
-    <AuthContext.Provider value={{ user, userName, orgName, signOut }}>
+    <AuthContext.Provider
+      value={{ user, userName, orgName: initialOrgName, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

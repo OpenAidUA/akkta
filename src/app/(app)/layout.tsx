@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation';
 import {
   DesktopSidebar,
   MobileSidebar,
@@ -7,6 +6,7 @@ import Header from '@/shared/components/layout/Header';
 import { createSupabaseServerClient } from '@/shared/supabase/server';
 import { AuthProvider } from '@/shared/providers/AuthProvider';
 import { SidebarProvider } from '@/shared/providers/SidebarProvider';
+import { getOrganizationByUserId } from '@/modules/organizations/service';
 
 export default async function AppLayout({
   children,
@@ -18,9 +18,10 @@ export default async function AppLayout({
   const {
     data: { user },
   } = await supabase.auth.getUser();
+  const org = user ? await getOrganizationByUserId(user.id) : null;
 
   return (
-    <AuthProvider user={user ?? null}>
+    <AuthProvider user={user ?? null} initialOrgName={org?.name ?? ''}>
       <SidebarProvider>
         <div className="flex min-h-dvh">
           {user ? (
