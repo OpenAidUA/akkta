@@ -1,7 +1,8 @@
 import { Settings } from 'react-feather';
 import { getOrganizationByUserId } from '@/modules/organizations/service';
 import { createSupabaseServerClient } from '@/shared/supabase/server';
-import SettingsForm from '../../../modules/settings/components/SettingsForm';
+// import SettingsForm from '../../../modules/settings/components/SettingsForm';
+import { SettingsTabs } from '@/modules/settings/components/SettingsTabs';
 
 export default async function SettingsPage() {
   const supabase = await createSupabaseServerClient();
@@ -12,6 +13,12 @@ export default async function SettingsPage() {
   if (!user) return null;
 
   const org = await getOrganizationByUserId(user.id);
+
+  const defaultValues = {
+    name: org?.name ?? '',
+    edrpou: org?.edrpou ?? '',
+    representative: org?.representative ?? '',
+  };
 
   if (!org) {
     return (
@@ -36,13 +43,15 @@ export default async function SettingsPage() {
         </p>
       </div>
 
-      <SettingsForm
+      <SettingsTabs defaultValues={defaultValues} />
+
+      {/* <SettingsForm
         defaultValues={{
           name: org.name,
           edrpou: org.edrpou ?? '',
           representative: org.representative ?? '',
         }}
-      />
+      /> */}
     </div>
   );
 }
